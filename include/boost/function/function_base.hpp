@@ -1,6 +1,6 @@
 // Boost.Function library
 
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -24,6 +24,8 @@
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/ref.hpp>
+#include <boost/thread/model/single.hpp>
+#include <boost/pending/ct_if.hpp>
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406
 #  define BOOST_FUNCTION_TARGET_FIX(x) x
@@ -31,53 +33,21 @@
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
+#ifndef BOOST_FUNCTION_DEFAULT_THREADING_POLICY
+#  define BOOST_FUNCTION_DEFAULT_THREADING_POLICY single_threaded
+#endif
+
+// Type of the default allocator
+#ifndef BOOST_NO_STD_ALLOCATOR
+#  define BOOST_FUNCTION_DEFAULT_ALLOCATOR std::allocator<function_base>
+#else
+#  define BOOST_FUNCTION_DEFAULT_ALLOCATOR int
+#endif // BOOST_NO_STD_ALLOCATOR
+
 namespace boost {
   namespace detail {
     namespace function {
       template<bool> struct truth {};
-
-      /*
-       * The ct_if implementation is temporary code. When a Boost metaprogramming
-       * library is introduced, Boost.Function will use it instead. 
-       */
-      namespace intimate {
-        struct SelectThen 
-        {       
-          template<typename Then, typename Else>
-          struct Result
-          {       
-            typedef Then type;
-          };
-        };
- 
-        struct SelectElse
-        {
-          template<typename Then, typename Else>
-          struct Result
-          { 
-            typedef Else type;
-          };
-        };
- 
-        template<bool Condition>
-        struct Selector
-        {
-          typedef SelectThen type;
-        };
- 
-        template<>
-        struct Selector<false>
-        {
-          typedef SelectElse type;
-        };
-      } // end namespace intimate 
- 
-      template<bool Condition, typename Then, typename Else>
-      struct ct_if
-      {
-        typedef typename intimate::Selector<Condition>::type select;
-        typedef typename select::template Result<Then,Else>::type type;
-      };
 
       /**
        * A union of a function pointer and a void pointer. This is necessary
@@ -158,7 +128,7 @@ namespace boost {
       // The trivial manager does nothing but return the same pointer (if we
       // are cloning) or return the null pointer (if we are deleting).
       inline any_pointer trivial_manager(any_pointer f, 
-					 functor_manager_operation_type op)
+                                         functor_manager_operation_type op)
       {
         if (op == clone_functor_tag)
           return f;
@@ -179,7 +149,7 @@ namespace boost {
         // For function pointers, the manager is trivial
         static inline any_pointer
         manager(any_pointer function_ptr, 
-		functor_manager_operation_type op,
+                functor_manager_operation_type op,
                 function_ptr_tag)
         {
           if (op == clone_functor_tag)
@@ -307,13 +277,13 @@ namespace boost {
   public: // should be protected, but GCC 2.95.3 will fail to allow access
     detail::function::any_pointer (*manager)(
                            detail::function::any_pointer, 
+                           detail::function::functor_manager_operation_type);
+    detail::function::any_pointer functor;
+
 #if (defined __SUNPRO_CC) && (__SUNPRO_CC <= 0x530) && !(defined BOOST_NO_COMPILER_CONFIG)
     // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
     operator bool () const { return !this->empty(); }
 #else
-                           detail::function::functor_manager_operation_type);
-    detail::function::any_pointer functor;
-
   private:
     struct dummy {
       void nonnull() {};
@@ -346,7 +316,7 @@ namespace boost {
       template<typename FunctionObj>
       inline bool has_empty_target(const FunctionObj&, truth<false>)
       {
-	return false;
+        return false;
       }
 
       // The result is a Boost.Function object, so query whether it is empty
@@ -356,29 +326,20 @@ namespace boost {
       { 
         return f.empty();
       }
+
+      template<typename Lock, typename Mixin>
+      struct scoped_double_lock
+      {
+        scoped_double_lock(const Mixin& m1, const Mixin& m2) :
+          lock1(&m1 < &m2? m1 : m2), lock2(!(&m1 < &m2)? m1 : m2)
+        {
+        }
+        
+        Lock lock1;
+        Lock lock2;
+      };
     } // end namespace function
   } // end namespace detail
-
-  // The default function policy is to do nothing before and after the call.
-  struct empty_function_policy
-  {
-    inline void precall(const function_base*) {}
-    inline void postcall(const function_base*) {}
-  };
-
-  // The default function mixin does nothing. The assignment and
-  // copy-construction operators are all defined because MSVC defines broken
-  // versions.
-  struct empty_function_mixin 
-  {
-    empty_function_mixin() {}
-    empty_function_mixin(const empty_function_mixin&) {}
-
-    empty_function_mixin& operator=(const empty_function_mixin&) 
-    {
-      return *this; 
-    }
-  };
 }
 
 #endif // BOOST_FUNCTION_BASE_HEADER

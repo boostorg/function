@@ -1,6 +1,6 @@
 // Boost.Function library
 
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -53,13 +53,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function0<R, Policy, Mixin, Allocator> type;
+          typedef function0<R, ThreadingPolicy, Allocator> type;
         };
       };
 
@@ -78,13 +77,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function1<R, T1, Policy, Mixin, Allocator> type;
+          typedef function1<R, T1, ThreadingPolicy, Allocator> type;
         };
       };
 
@@ -103,13 +101,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function2<R, T1, T2, Policy, Mixin, Allocator> type;
+          typedef function2<R, T1, T2, ThreadingPolicy, Allocator> type;
         };
       };
 
@@ -128,13 +125,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function3<R, T1, T2, T3, Policy, Mixin, Allocator> type;
+          typedef function3<R, T1, T2, T3, ThreadingPolicy, Allocator> type;
         };
       };
 
@@ -153,13 +149,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function4<R, T1, T2, T3, T4, Policy, Mixin, Allocator> type;
+          typedef function4<R, T1, T2, T3, T4, ThreadingPolicy, Allocator> type;
         };
       };
 
@@ -178,13 +173,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function5<R, T1, T2, T3, T4, T5, Policy, Mixin, Allocator> 
+          typedef function5<R, T1, T2, T3, T4, T5, ThreadingPolicy, Allocator> 
           type;
         };
       };
@@ -204,13 +198,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function6<R, T1, T2, T3, T4, T5, T6, Policy, Mixin, Allocator>
+          typedef function6<R, T1, T2, T3, T4, T5, T6, ThreadingPolicy, Allocator>
           type;
         };
       };
@@ -230,13 +223,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function7<R, T1, T2, T3, T4, T5, T6, T7, Policy, Mixin, 
+          typedef function7<R, T1, T2, T3, T4, T5, T6, T7, ThreadingPolicy, 
                             Allocator> type;
         };
       };
@@ -256,13 +248,12 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function8<R, T1, T2, T3, T4, T5, T6, T7, T8, Policy, Mixin, 
+          typedef function8<R, T1, T2, T3, T4, T5, T6, T7, T8, ThreadingPolicy, 
                             Allocator> type;
         };
       };
@@ -282,14 +273,13 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
-          typedef function9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, Policy, 
-                            Mixin, Allocator> type;
+          typedef function9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
+                            ThreadingPolicy, Allocator> type;
         };
       };
 
@@ -308,14 +298,13 @@ namespace boost {
           typename T8,
           typename T9,
           typename T10,
-          typename Policy,
-          typename Mixin,
+          typename ThreadingPolicy,
           typename Allocator
         >
         struct params
         {
           typedef function10<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
-                             Policy, Mixin, Allocator> type;
+                             ThreadingPolicy, Allocator> type;
         };
       };
 
@@ -331,16 +320,15 @@ namespace boost {
         typename T8, 
         typename T9,
         typename T10,
-        typename Policy = empty_function_policy,
-        typename Mixin = empty_function_mixin,
-        typename Allocator = std::allocator<function_base> 
+        typename ThreadingPolicy = BOOST_FUNCTION_DEFAULT_THREADING_POLICY,
+        typename Allocator = BOOST_FUNCTION_DEFAULT_ALLOCATOR 
       >
       struct get_function_impl
       {
         typedef typename real_get_function_impl<
           (count_used_args<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>::value)
           >::template params<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
-                             Policy, Mixin, Allocator>::type
+                             ThreadingPolicy, Allocator>::type
         type;
       };
 
@@ -356,55 +344,37 @@ namespace boost {
     typename T8, 
     typename T9,
     typename T10,
-    typename MyPolicy = empty_function_policy,
-    typename MyMixin = empty_function_mixin,
-    typename MyAllocator = std::allocator<function_base> 
+    typename MyThreadingPolicy = BOOST_FUNCTION_DEFAULT_THREADING_POLICY,
+    typename MyAllocator = BOOST_FUNCTION_DEFAULT_ALLOCATOR 
   >
   struct function_traits_builder
   {
     typedef typename get_function_impl<R, T1, T2, T3, T4, T5, T6, T7, 
-                                       T8, T9, T10, MyPolicy, MyMixin, 
+                                       T8, T9, T10, MyThreadingPolicy,
                                        MyAllocator>::type
       type;
 
-    typedef MyPolicy    policy_type;
-    typedef MyMixin     mixin_type;
+    typedef MyThreadingPolicy threading_policy_type;
     typedef MyAllocator allocator_type;
 
 #ifndef BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
-    template<typename Policy>
-    struct policy : 
+    template<typename ThreadingPolicy>
+    struct threading_policy : 
         public function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7, T8, T9,
-                                       T10, Policy, mixin_type, 
-                                       allocator_type> {};
-
-    template<typename Mixin>
-    struct mixin : 
-        public function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7, T8, T9,
-                                       T10, policy_type, Mixin, 
+                                       T10, ThreadingPolicy,
                                        allocator_type> {};
 
     template<typename Allocator>
     struct allocator : 
         public function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7, T8, T9,
-                                       T10, policy_type, mixin_type, 
+                                       T10, threading_policy_type,
                                        Allocator> {};
 #else
-    template<typename Policy>
-    struct policy 
+    template<typename ThreadingPolicy>
+    struct threading_policy 
     {
       typedef typename function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7,
-                                               T8, T9, T10, Policy, 
-                                               mixin_type, 
-                                               allocator_type>::type
-        type;
-    };
-
-    template<typename Mixin>
-    struct mixin
-    {
-      typedef typename function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7,
-                                               T8, T9, T10, policy_type, Mixin,
+                                               T8, T9, T10, ThreadingPolicy, 
                                                allocator_type>::type
         type;
     };
@@ -413,8 +383,9 @@ namespace boost {
     struct allocator
     {
       typedef typename function_traits_builder<R, T1, T2, T3, T4, T5, T6, T7,
-                                               T8, T9, T10, policy_type, 
-                                               mixin_type, Allocator>::type
+                                               T8, T9, T10, 
+                                               threading_policy_type, 
+                                               Allocator>::type
         type;
     };
 #endif
@@ -448,8 +419,7 @@ namespace boost {
       base_type;
 
   public:
-    typedef typename base_type::policy_type policy_type;
-    typedef typename base_type::mixin_type mixin_type;
+    typedef typename base_type::threading_policy_type policy_type;
     typedef typename base_type::allocator_type allocator_type;              
     typedef function self_type;                                     
                                                                             
@@ -463,37 +433,21 @@ namespace boost {
     template<typename Functor>
     self_type& operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
-      self_type(f).swap(*this);
+      base_type::operator=(f);
       return *this;
     }
 
     self_type& operator=(const base_type& f)
     {
-      self_type(f).swap(*this);
+      base_type::operator=(f);
       return *this;
     }
 
     self_type& operator=(const self_type& f)
     {   
-      self_type(f).swap(*this);
+      base_type::operator=(static_cast<const base_type&>(f));
       return *this;
     }
-
-    template<typename Functor>
-    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
-    {
-      self_type(f).swap(*this);
-    }
-
-    void set(const base_type& f)
-    {
-      self_type(f).swap(*this);
-    }
-
-    void set(const self_type& f)                             
-    {
-      self_type(f).swap(*this);
-    }   
   };
 
   template<typename R,

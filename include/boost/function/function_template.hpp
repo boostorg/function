@@ -1,6 +1,6 @@
 // Boost.Function library
 
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -24,13 +24,6 @@
 #  include <boost/function/function_base.hpp>
 #  include <boost/mem_fn.hpp>
 #endif // BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP
-
-// Type of the default allocator
-#ifndef BOOST_NO_STD_ALLOCATOR
-#  define BOOST_FUNCTION_DEFAULT_ALLOCATOR std::allocator<function_base>
-#else
-#  define BOOST_FUNCTION_DEFAULT_ALLOCATOR int
-#endif // BOOST_NO_STD_ALLOCATOR
 
 // Comma if nonzero number of arguments
 #if BOOST_FUNCTION_NUM_ARGS == 0
@@ -229,14 +222,17 @@ namespace boost {
   template<
     typename R BOOST_FUNCTION_COMMA
     BOOST_FUNCTION_TEMPLATE_PARMS,
-    typename Policy    = empty_function_policy,
-    typename Mixin     = empty_function_mixin,
+    typename ThreadingPolicy = BOOST_FUNCTION_DEFAULT_THREADING_POLICY,
     typename Allocator = BOOST_FUNCTION_DEFAULT_ALLOCATOR
   >
-  class BOOST_FUNCTION_FUNCTION : public function_base, public Mixin
+  class BOOST_FUNCTION_FUNCTION : public function_base,
+                                  public ThreadingPolicy::mixin
   {
     typedef typename detail::function::function_return_type<R>::type 
       internal_result_type;
+
+    typedef typename ThreadingPolicy::mixin threading_mixin;
+    typedef typename ThreadingPolicy::lock lock;
 
   public:
     BOOST_STATIC_CONSTANT(int, args = BOOST_FUNCTION_NUM_ARGS);
@@ -253,54 +249,48 @@ namespace boost {
 #else
     typedef internal_result_type result_type;
 #endif // BOOST_NO_VOID_RETURNS
-    typedef Policy    policy_type;
-    typedef Mixin     mixin_type;
     typedef Allocator allocator_type;
     typedef BOOST_FUNCTION_FUNCTION self_type;
+    typedef ThreadingPolicy threading_policy_type;
 
-    BOOST_FUNCTION_FUNCTION() : function_base(), Mixin(), invoker(0) {}
-
-    explicit BOOST_FUNCTION_FUNCTION(const Mixin& m) : 
-      function_base(), Mixin(m), invoker(0) 
-    {
-    }
+    BOOST_FUNCTION_FUNCTION() : function_base(), invoker(0) {}
 
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) :
-      function_base(), Mixin(), invoker(0)
-    {
-      this->assign_to(f);
-    }
-
-    template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor f, const Mixin& m) :
-      function_base(), Mixin(m), invoker(0)
+      function_base(), invoker(0)
     {
       this->assign_to(f);
     }
 
     BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) :
-      function_base(), Mixin(static_cast<const Mixin&>(f)), invoker(0)
+      function_base(), invoker(0)
     {
+      // Lock the other function object so it can't change during assignment
+      lock l(static_cast<const self_type&>(f));
+      (void)l;
       this->assign_to_own(f);
     }
 
-    ~BOOST_FUNCTION_FUNCTION() { clear(); }
+    ~BOOST_FUNCTION_FUNCTION() 
+    { 
+      lock l(static_cast<const threading_mixin&>(*this));
+      (void)l;
+      clear(); 
+    }
 
     result_type operator()(BOOST_FUNCTION_PARMS) const
     {
+      // Make sure this function can't change while it is being invoked
+      lock l(static_cast<const threading_mixin&>(*this));
+      (void)l;
       assert(!this->empty());
-
-      policy_type policy;
-      policy.precall(this);
 
       internal_result_type result = invoker(function_base::functor 
                                             BOOST_FUNCTION_COMMA
                                             BOOST_FUNCTION_ARGS);
 
-      policy.postcall(this);
 #ifndef BOOST_NO_VOID_RETURNS
       return static_cast<result_type>(result);
 #else
@@ -317,14 +307,11 @@ namespace boost {
     BOOST_FUNCTION_FUNCTION& 
     operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
-      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
+      self_type other(f);
+      lock l(static_cast<const threading_mixin&>(*this));
+      (void)l;
+      other.unlocked_swap(*this);
       return *this;
-    }
-
-    template<typename Functor>
-    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
-    {
-      self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
     }
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
@@ -333,17 +320,12 @@ namespace boost {
       if (&f == this)
         return *this;
 
-      self_type(f).swap(*this);
+      self_type other(f);
+      lock l(static_cast<const threading_mixin&>(*this));
+      (void)l;
+      other.unlocked_swap(*this);
+
       return *this;
-    }
-
-    // Assignment from another BOOST_FUNCTION_FUNCTION
-    void set(const BOOST_FUNCTION_FUNCTION& f)
-    {
-      if (&f == this)
-        return;
-
-      self_type(f).swap(*this);
     }
 
     void swap(BOOST_FUNCTION_FUNCTION& other)
@@ -351,15 +333,19 @@ namespace boost {
       if (&other == this)
         return;
 
-      std::swap(function_base::manager, other.manager);
-      std::swap(function_base::functor, other.functor);
-      std::swap(invoker, other.invoker);
-      std::swap(static_cast<Mixin&>(*this), static_cast<Mixin&>(other));
+      detail::function::scoped_double_lock<lock, threading_mixin> l(*this, 
+                                                                    other);
+      (void)l;
+
+      unlocked_swap(other);
     }
 
     // Clear out a target, if there is one
     void clear()
     {
+      lock l(static_cast<const threading_mixin&>(*this));
+      (void)l;
+
       if (function_base::manager) {
         function_base::functor = 
 	  function_base::manager(function_base::functor, 
@@ -378,7 +364,7 @@ namespace boost {
         function_base::manager = f.manager;
         function_base::functor = 
 	  f.manager(f.functor, detail::function::clone_functor_tag);
-      }          
+      }
     }
 
     template<typename Functor>
@@ -502,6 +488,13 @@ namespace boost {
       function_base::functor = detail::function::any_pointer(this);
     }
 
+    void unlocked_swap(BOOST_FUNCTION_FUNCTION& other)
+    {
+      std::swap(function_base::manager, other.manager);
+      std::swap(function_base::functor, other.functor);
+      std::swap(invoker, other.invoker);
+    }
+
     typedef internal_result_type (*invoker_type)(detail::function::any_pointer
                                                  BOOST_FUNCTION_COMMA
                                                  BOOST_FUNCTION_TEMPLATE_ARGS);
@@ -510,19 +503,17 @@ namespace boost {
   };
 
   template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
-           typename Policy, typename Mixin, typename Allocator>
+           typename ThreadingPolicy, typename Allocator>
   inline void swap(BOOST_FUNCTION_FUNCTION<
                      R BOOST_FUNCTION_COMMA
                      BOOST_FUNCTION_TEMPLATE_ARGS ,
-                     Policy,
-                     Mixin,
+                     ThreadingPolicy,
                      Allocator
                    >& f1,
                    BOOST_FUNCTION_FUNCTION<
                      R BOOST_FUNCTION_COMMA 
                      BOOST_FUNCTION_TEMPLATE_ARGS,
-                     Policy,
-                     Mixin,
+                     ThreadingPolicy,
                      Allocator
                    >& f2)
   {
@@ -531,7 +522,6 @@ namespace boost {
 }
 
 // Cleanup after ourselves...
-#undef BOOST_FUNCTION_DEFAULT_ALLOCATOR
 #undef BOOST_FUNCTION_COMMA
 #undef BOOST_FUNCTION_FUNCTION
 #undef BOOST_FUNCTION_FUNCTION_INVOKER
