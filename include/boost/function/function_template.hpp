@@ -23,6 +23,7 @@
 #  include <boost/config.hpp>
 #  include <boost/function/function_base.hpp>
 #  include <boost/mem_fn.hpp>
+#  include <boost/type_traits/arithmetic_traits.hpp>
 #endif // BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP
 
 // Type of the default allocator
@@ -167,7 +168,8 @@ namespace boost {
       >
       struct BOOST_FUNCTION_GET_FUNCTION_INVOKER
       {
-        typedef typename ct_if<(is_void<R>::value),
+        BOOST_STATIC_CONSTANT(bool, is_void_ = ::boost::is_void<R>::value);
+        typedef typename ct_if<is_void_,
                             BOOST_FUNCTION_VOID_FUNCTION_INVOKER<
                             FunctionPtr,
                             R BOOST_FUNCTION_COMMA
@@ -188,7 +190,8 @@ namespace boost {
        >
       struct BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER
       {
-        typedef typename ct_if<(is_void<R>::value),
+        BOOST_STATIC_CONSTANT(bool, is_void_ = ::boost::is_void<R>::value);
+        typedef typename ct_if<is_void_,
                             BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER<
                             FunctionObj,
                             R BOOST_FUNCTION_COMMA
@@ -209,7 +212,8 @@ namespace boost {
        >
       struct BOOST_FUNCTION_GET_STATELESS_FUNCTION_OBJ_INVOKER
       {
-        typedef typename ct_if<(is_void<R>::value),
+        BOOST_STATIC_CONSTANT(bool, is_void_ = ::boost::is_void<R>::value);
+        typedef typename ct_if<is_void_,
                             BOOST_FUNCTION_STATELESS_VOID_FUNCTION_OBJ_INVOKER<
                             FunctionObj,
                             R BOOST_FUNCTION_COMMA
