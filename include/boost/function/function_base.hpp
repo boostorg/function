@@ -1,6 +1,6 @@
 // Boost.Function library
 
-//  Copyright Doug Gregor 2001-2003. Use, modification and
+//  Copyright Doug Gregor 2001-2004. Use, modification and
 //  distribution is subject to the Boost Software License, Version
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -350,10 +350,17 @@ namespace detail {
       return f->empty();
     }
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
     inline bool has_empty_target(const void*)
     {
       return false;
     }
+#else
+    inline bool has_empty_target(...)
+    {
+      return false;
+    }
+#endif
   } // end namespace function
 } // end namespace detail
 } // end namespace boost
