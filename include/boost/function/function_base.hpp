@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/ref.hpp>
-#include <boost/thread/model/single.hpp>
+#include <boost/function/threading/single.hpp>
 #include <boost/pending/ct_if.hpp>
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406
