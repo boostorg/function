@@ -5,7 +5,7 @@
   </head>
 
   <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
-<h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86">boost::function Frequently Asked Questions</h1>
+<h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86" alt="C++ Boost">boost::function Frequently Asked Questions</h1>
 
 <h2>Q: I see void pointers; is this [mess] type safe?</h2>
 <p>Yes, <code>boost::function</code> is type safe even though it uses void pointers and pointers to functions returning void and taking no arguments. Essentially, all type information is encoded in the functions that manage and invoke function pointers and function objects. Only these functions are instantiated with the exact type that is pointed to by the void pointer or pointer to void function. The reason that both are required is that one may cast between void pointers and object pointers safely or between different types of function pointers (provided you don't invoke a function pointer with the wrong type). 
@@ -21,7 +21,7 @@ void g() { return f(); }
 <pre>
 int do_something(int);
 
-boost::function<void, int> f;
+boost::function&lt;void, int&gt; f;
 f = do_something;
 </pre>
 <p> This is a valid usage of <code>boost::function</code> because void returns are not used. With void returns, we would attempting to compile ill-formed code similar to:

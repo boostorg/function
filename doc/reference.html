@@ -6,9 +6,9 @@
 
   <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
 
-  <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86">Boost.Function Reference Manual</h1>
+  <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86" alt="C++ Boost">Boost.Function Reference Manual</h1>
 
-<h2><a name="header">Header <code>&lt;<a href="../../../boost/function.hpp">boost/function.hpp</a>&gt;</code> synopsis</a></h2>
+<h2><a name="header">Header</a> <code>&lt;<a href="../../../boost/function.hpp">boost/function.hpp</a>&gt;</code> synopsis</h2>
 <p> Here <code><i>MAX_ARGS</i></code> is an implementation-defined constant that defines the maximum number of function arguments supported by Boost.Function and will be at least 10. The <code><i>MAX_ARGS</i></code> constant referred to in this document need not have any direct representation in the library.
 
 <pre>
@@ -84,7 +84,7 @@
             function<em>N</em>&lt;ResultType, Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
 
   // For any <i>N</i> in [0, <i>MAX_ARGS</i>]
-  <b>template</b>&lt;<b>typename</b> Signature, <em>// Function type: ResultType (Arg1, Arg2, ..., Arg<em>N</em>)</em>
+  <b>template</b>&lt;<b>typename</b> Signature, <em>// Function type: ResultType (Arg1, Arg2, ..., ArgN)</em>
 	   <b>typename</b> Policy    = empty_function_policy, <em>// Deprecated</em>
 	   <b>typename</b> Mixin     = empty_function_mixin, <em>// Deprecated</em>
 	   <b>typename</b> Allocator = std::allocator&lt;function_base&gt; &gt;
@@ -112,7 +112,6 @@
 </pre>
 
 <h2>Definitions</h2>
-<p>
 <ul>
   <li><a name="compatible"></a>A function object <code>f</code> is <em>compatible</em> if for the given set of argument types <code>Arg1</code>, <code>Arg2</code>, ..., <code>Arg<em>N</em></code> and a return type <code>ResultType</code>, the appropriate following function is well-formed:
 <pre>
@@ -172,7 +171,7 @@
   <li><b>Throws</b>: will not throw when <code>g</code> is a <a href="#stateless">stateless</a> function object unless construction of the <code>Mixin</code> subobject throws.</li>
 </ul>
 
-<p> <a name="functionN_target_ref"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code></a>
+<p> <a name="functionN_target_ref"></a><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code>
 <ul>
   <li><b>Requires</b>: <code>g.get()</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
@@ -195,7 +194,7 @@
   <li><b>Throws</b>: will not throw when <code>g</code> is a <a href="#stateless">stateless</a> function object.</li>
 </ul>
 
-<p> <a name="functionN_target_ref_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code></a>
+<p> <a name="functionN_target_ref_assn"></a><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code>
 <ul>
   <li><b>Requires</b>: <code>g.get()</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Postconditions</b>: <code>f</code> targets <code>g.get()</code> (not a copy of <code>g.get()</code>) if <code>g.get()</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g.get()</code> is empty.</li>
@@ -260,7 +259,6 @@
 <p> The semantics of all operations in class template <code>function</code> are equivalent to that of the underlying <code>function<i>N</i></code> object, although additional member functions are required to allow proper copy construction and copy assignment of <code>function</code> objects.
 
 <h2><a name="operations">Operations</a></h2>
-<p>
 <pre>
 <b>template</b>&lt;<b>typename</b> ResultType,
          <b>typename</b> Arg1,
@@ -277,7 +275,6 @@
   <li><b>Effects</b>: <code>f.<a href="#functionN_swap">swap</a>(g);</code></li>
 </ul>
 
-<p>
 <pre>
 <b>template</b>&lt;<b>typename</b> Signature, <b>typename</b> Policy, <b>typename</b> Mixin, <b>typename</b> Allocator&gt;
 <b>void</b> <a name="swap_function">swap</a>(function&lt;Signature, Policy, Mixin, Allocator&gt;<b>&amp;</b> f,

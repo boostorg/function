@@ -6,17 +6,17 @@
 
   <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
 
-    <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86">Boost.Function Tutorial</h1>
+    <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86" alt="C++ Boost">Boost.Function Tutorial</h1>
 
 <p> Boost.Function has two syntactical forms: the preferred form and the compatibility form. The preferred form fits more closely with the C++ language and reduces the number of separate template parameters that need to be considered, often improving readability; however, the preferred form is not supported on all platforms due to compiler bugs. The compatible form will work on all compilers supported by Boost.Function. Consult the table below to determine which syntactic form to use for your compiler.
 
     <center>
-      <table border=1 cellspacing=1>
+      <table border=1 cellspacing=1 summary="Compilers support for Boost.Function syntactic constructs">
           <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
           <tr>
             <td>
               <ul>
-                <li>GNU C++ 2.95.x, 3.0.x, 3.1.x</li>
+                <li>GNU C++ 2.95.x, 3.0.x, 3.1.x, 3.2</li>
                 <li>Comeau C++ 4.2.45.2</li>
                 <li>SGI MIPSpro 7.3.0</li>
                 <li>Intel C++ 5.0, 6.0</li>
@@ -37,10 +37,10 @@
 
 <p> If your compiler does not appear in this list, please try the preferred syntax and report your results to the Boost list so that we can keep this table up-to-date.
 
-<a name="preferred"><h2>Basic Usage</h2></a>
+<h2><a name="preferred">Basic Usage</a></h2>
 <p> A function wrapper is defined simply by instantiating the <code>function</code> class template with the desired return type and argument types, formulated as a C++ function type. Any number of arguments may be supplied, up to some implementation-defined limit (10 is the default maximum). The following declares a function object wrapper <code>f</code> that takes two <code>int</code> parameters and returns a <code>float</code>:
 <center>
-<table border=1 cellspacing=1>
+<table border=1 cellspacing=1 summary="Declaring Boost.Function objects">
         <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
         <tr>
           <td>
@@ -77,7 +77,7 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
 <p> We are free to assign any compatible function object to <code>f</code>. If <code>int_div</code> had been declared to take two <code>long</code> operands,
 the implicit conversions would have been applied to the arguments without any user interference. The only limit on the types of arguments is that they be CopyConstructible, so we can even use references and arrays:
 <center>
-<table border=1 cellspacing=1>
+<table border=1 cellspacing=1 summary="Declaring a more complex Boost.Function object">
         <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
           <tr>
             <td>
@@ -95,7 +95,7 @@ boost::function4&lt;void, int[], int, int&amp;, float&gt; sum_avg;
 </center>
 
 <pre>
-void do_sum_avg(int values[], int n, int& sum, float&amp; avg)
+void do_sum_avg(int values[], int n, int&amp; sum, float&amp; avg)
 {
   sum = 0;
   for (int i = 0; i &lt; n; i++)
@@ -125,13 +125,12 @@ else
 
 <p> Note that the <code>&amp;</code> isn't really necessary unless you happen to be using Microsoft Visual C++ version 6.
 
-<h3>Member functions</h3>
-<a name="member_func">
+<h3><a name="member_func">Member functions</a></h3>
 <p> In many systems, callbacks often call to member functions of a particular
 object. This is often referred to as "argument binding", and is beyond the scope of Boost.Function. The use of member functions directly, however, is supported, so the following code is valid:
 
 <center>
-<table border=1 cellspacing=1>
+<table border=1 cellspacing=1 summary="Member functions and Boost.Function">
         <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
           <tr>
             <td>
@@ -172,7 +171,7 @@ f(&amp;x, 5);
 
   <li> The C++ Standard library. Using <code>std::bind1st</code> and <code>std::mem_fun</code> together one can bind the object of a pointer-to-member function for use with Boost.Function:
 <center>
-<table border=1 cellspacing=1>
+<table border=1 cellspacing=1 summary="Boost.Bind and Boost.Function">
         <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
           <tr>
             <td>
@@ -216,7 +215,7 @@ href="../../bind/ref.html"><code>ref</code></a> and <a
 href="../../bind/ref.html"><code>cref</code></a> functions to wrap a
 reference to a function object:
 <center>
-<table border=1 cellspacing=1>
+<table border=1 cellspacing=1 summary="ref and cref with Boost.Function">
         <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
           <tr>
             <td>
