@@ -25,6 +25,9 @@
 #  include <boost/mem_fn.hpp>
 #endif // BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP
 
+// Include better error handling for 
+#include <boost/function/errors.hpp>
+
 // Type of the default allocator
 #ifndef BOOST_NO_STD_ALLOCATOR
 #  define BOOST_FUNCTION_DEFAULT_ALLOCATOR std::allocator<function_base>
@@ -288,6 +291,16 @@ namespace boost {
       this->assign_to_own(f);
     }
 
+#ifdef BOOST_COMPILER_HOOKS
+    template<typename Functor, int N>
+    BOOST_FUNCTION_FUNCTION(Functor f, const Mixin& m, 
+                            detail::function::int_value<N> iv) :
+      function_base(), Mixin(m), invoker(0)
+    {
+      this->assign_to(f, iv);
+    }
+#endif // BOOST_COMPILER_HOOKS
+
     ~BOOST_FUNCTION_FUNCTION() { clear(); }
 
     result_type operator()(BOOST_FUNCTION_PARMS) const
@@ -318,14 +331,25 @@ namespace boost {
     BOOST_FUNCTION_FUNCTION& 
     operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
+#ifdef BOOST_COMPILER_HOOKS
+      self_type(f, static_cast<const Mixin&>(*this),
+                detail::function::int_value<1>()).swap(*this);
+#else
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
+#endif // !BOOST_COMPILER_HOOKS
+
       return *this;
     }
 
     template<typename Functor>
     void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
+#ifdef BOOST_COMPILER_HOOKS
+      self_type(f, static_cast<const Mixin&>(*this),
+                detail::function::int_value<1>()).swap(*this);
+#else
       self_type(f, static_cast<const Mixin&>(*this)).swap(*this);
+#endif // !BOOST_COMPILER_HOOKS
     }
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
@@ -378,12 +402,48 @@ namespace boost {
       }          
     }
 
+#ifdef BOOST_COMPILER_HOOKS
+    template<typename Functor>
+    void assign_to(Functor f)
+    {
+      return assign_to(f, detail::function::int_value<1>());
+    }
+
+    template<typename Functor, int N>
+    void assign_to(Functor f, detail::function::int_value<N>)
+    {
+      typedef detail::function::BOOST_JOIN(check_target,BOOST_FUNCTION_NUM_ARGS)<
+                Functor, R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS,
+                N+2>
+        check_target;
+
+      enum { ok = check_target::value };
+
+      maybe_assign_to(f, detail::function::truth<ok>());
+    }
+
+    template<typename Functor>
+    void maybe_assign_to(Functor f, detail::function::truth<true>)
+    {
+      typedef typename detail::function::get_function_tag<Functor>::type tag;
+
+      this->assign_to(f, tag());
+    }
+
+    template<typename Functor>
+    void maybe_assign_to(Functor f, detail::function::truth<false>)
+    {
+      // Do nothing, to avoid even more error messages
+    }
+#else
     template<typename Functor>
     void assign_to(Functor f)
     {
       typedef typename detail::function::get_function_tag<Functor>::type tag;
+
       this->assign_to(f, tag());
     }
+#endif // !BOOST_COMPILER_HOOKS
 
     template<typename FunctionPtr>
     void assign_to(FunctionPtr f, detail::function::function_ptr_tag)

@@ -454,16 +454,37 @@ namespace boost {
     typedef function self_type;                                     
                                                                             
     function() : base_type() {}                                     
-                                                                            
+                                                             
+#ifdef BOOST_COMPILER_HOOKS               
     template<typename Functor>                                              
-    function(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) : base_type(f) {}
+    function(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) : 
+      base_type(f, mixin_type(), detail::function::int_value<1>()) 
+    {
+    }
+
+  private:
+    template<typename Functor, int N>
+    function(Functor BOOST_FUNCTION_TARGET_FIX(const &) f, 
+             detail::function::int_value<N>) : 
+      base_type(f, mixin_type(), detail::function::int_value<N+1>())
+    {
+    }
+  public:
+#else
+    template<typename Functor>                                              
+    function(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) : base_type(f) {}   
+#endif // !BOOST_COMPILER_HOOKS
                       
     function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
          
     template<typename Functor>
     self_type& operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
+#ifdef BOOST_COMPILER_HOOKS
+      self_type(f, detail::function::int_value<1>()).swap(*this);
+#else
       self_type(f).swap(*this);
+#endif // !BOOST_COMPILER_HOOKS
       return *this;
     }
 
