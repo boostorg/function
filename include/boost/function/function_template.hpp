@@ -75,6 +75,11 @@
 #  pragma warning(disable: 4127) // conditional expression is constant.
 #endif
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4127) // conditional expression is constant.
+#endif
+
 namespace boost {
   namespace detail {
     namespace function {
@@ -792,6 +797,10 @@ public:
     return *this;
   }
 };
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #undef BOOST_FUNCTION_PARTIAL_SPEC
 #endif // have partial specialization
