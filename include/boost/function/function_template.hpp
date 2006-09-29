@@ -70,6 +70,11 @@
 #  define BOOST_FUNCTION_RETURN(X) X; return BOOST_FUNCTION_VOID_RETURN_TYPE ()
 #endif
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4127) // conditional expression is constant.
+#endif
+
 namespace boost {
   namespace detail {
     namespace function {
@@ -792,6 +797,10 @@ public:
 #endif // have partial specialization
 
 } // end namespace boost
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 // Cleanup after ourselves...
 #undef BOOST_FUNCTION_VTABLE
