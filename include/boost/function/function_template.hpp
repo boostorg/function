@@ -938,7 +938,7 @@ namespace boost {
         if (boost::has_trivial_copy_constructor<Functor>::value &&
             boost::has_trivial_destructor<Functor>::value &&
             detail::function::function_allows_small_object_optimization<Functor>::value)
-          value |= static_cast<size_t>(0x01);
+          value |= static_cast<std::size_t>(0x01);
         vtable = reinterpret_cast<detail::function::vtable_base *>(value);
       } else 
         vtable = 0;
