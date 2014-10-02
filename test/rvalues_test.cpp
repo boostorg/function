@@ -46,6 +46,18 @@ only_movable two(BOOST_RV_REF(only_movable) t) {
     return BOOST_MOVE_RET(only_movable, t1);
 }
 
+only_movable two_sum(BOOST_RV_REF(only_movable) t1, BOOST_RV_REF(only_movable) t2) {
+    only_movable ret(t1.get_value() + t2.get_value());
+    return BOOST_MOVE_RET(only_movable, ret);
+}
+
+struct sum_struct {
+    only_movable operator()(BOOST_RV_REF(only_movable) t1, BOOST_RV_REF(only_movable) t2) const {
+        only_movable ret(t1.get_value() + t2.get_value());
+        return BOOST_MOVE_RET(only_movable, ret);
+    }
+};
+
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 int three(std::string&&) { return 1; }
 std::string&& four(std::string&& s) { return boost::move(s); }
@@ -66,6 +78,21 @@ int test_main(int, char*[])
     only_movable om2_2 = f2(boost::move(om2));
     BOOST_CHECK(om2_2.get_value() == 2);
     BOOST_CHECK(om2.is_moved());
+
+    {
+        function <only_movable(BOOST_RV_REF(only_movable), BOOST_RV_REF(only_movable))>  f2_sum = two_sum;
+        only_movable om1_sum(1), om2_sum(2);
+        only_movable om2_sum_2 = f2_sum(boost::move(om1_sum), boost::move(om2_sum));
+        BOOST_CHECK(om2_sum_2.get_value() == 3);
+    }
+
+    {
+        sum_struct s;
+        function <only_movable(BOOST_RV_REF(only_movable), BOOST_RV_REF(only_movable))>  f2_sum = s;
+        only_movable om1_sum(1), om2_sum(2);
+        only_movable om2_sum_2 = f2_sum(boost::move(om1_sum), boost::move(om2_sum));
+        BOOST_CHECK(om2_sum_2.get_value() == 3);
+    }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     function <int(std::string&&)>               f3 = three;
