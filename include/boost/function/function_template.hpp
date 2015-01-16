@@ -920,10 +920,10 @@ namespace boost {
     template<typename Functor>
     void assign_to(Functor f)
     {
-      using detail::function::vtable_base;
+      using boost::detail::function::vtable_base;
 
-      typedef typename detail::function::get_function_tag<Functor>::type tag;
-      typedef detail::function::BOOST_FUNCTION_GET_INVOKER<tag> get_invoker;
+      typedef typename boost::detail::function::get_function_tag<Functor>::type tag;
+      typedef boost::detail::function::BOOST_FUNCTION_GET_INVOKER<tag> get_invoker;
       typedef typename get_invoker::
                          template apply<Functor, R BOOST_FUNCTION_COMMA 
                         BOOST_FUNCTION_TEMPLATE_ARGS>
@@ -944,9 +944,9 @@ namespace boost {
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
         if (boost::has_trivial_copy_constructor<Functor>::value &&
             boost::has_trivial_destructor<Functor>::value &&
-            detail::function::function_allows_small_object_optimization<Functor>::value)
+            boost::detail::function::function_allows_small_object_optimization<Functor>::value)
           value |= static_cast<std::size_t>(0x01);
-        vtable = reinterpret_cast<detail::function::vtable_base *>(value);
+        vtable = reinterpret_cast<boost::detail::function::vtable_base *>(value);
       } else 
         vtable = 0;
     }
@@ -954,10 +954,10 @@ namespace boost {
     template<typename Functor,typename Allocator>
     void assign_to_a(Functor f,Allocator a)
     {
-      using detail::function::vtable_base;
+      using boost::detail::function::vtable_base;
 
-      typedef typename detail::function::get_function_tag<Functor>::type tag;
-      typedef detail::function::BOOST_FUNCTION_GET_INVOKER<tag> get_invoker;
+      typedef typename boost::detail::function::get_function_tag<Functor>::type tag;
+      typedef boost::detail::function::BOOST_FUNCTION_GET_INVOKER<tag> get_invoker;
       typedef typename get_invoker::
                          template apply_a<Functor, R BOOST_FUNCTION_COMMA 
                          BOOST_FUNCTION_TEMPLATE_ARGS,
@@ -979,9 +979,9 @@ namespace boost {
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
         if (boost::has_trivial_copy_constructor<Functor>::value &&
             boost::has_trivial_destructor<Functor>::value &&
-            detail::function::function_allows_small_object_optimization<Functor>::value)
+            boost::detail::function::function_allows_small_object_optimization<Functor>::value)
           value |= static_cast<std::size_t>(0x01);
-        vtable = reinterpret_cast<detail::function::vtable_base *>(value);
+        vtable = reinterpret_cast<boost::detail::function::vtable_base *>(value);
       } else 
         vtable = 0;
     }
