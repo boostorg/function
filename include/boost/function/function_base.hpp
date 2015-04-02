@@ -27,7 +27,6 @@
 #include <boost/type_traits/composite_traits.hpp>
 #include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/mpl/logical.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/type_traits/alignment_of.hpp>
