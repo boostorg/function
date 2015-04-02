@@ -25,9 +25,9 @@
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_volatile.hpp>
 #include <boost/type_traits/composite_traits.hpp>
-#include <boost/type_traits/ice.hpp>
 #include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/not.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #ifndef BOOST_NO_SFINAE
@@ -74,15 +74,15 @@
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x5A0)
 #  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
-      typename ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
-                            (::boost::is_integral<Functor>::value)>::value), \
+      typename ::boost::enable_if<typename ::boost::mpl::not_<          \
+                            ::boost::is_integral<Functor> >::type, \
                            Type>::type
 #else
 // BCC doesn't recognize this depends on a template argument and complains
 // about the use of 'typename'
 #  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)     \
-      ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
-                   (::boost::is_integral<Functor>::value)>::value), \
+      ::boost::enable_if<::boost::mpl::not_<          \
+                   ::boost::is_integral<Functor> >::type, \
                        Type>::type
 #endif
 
