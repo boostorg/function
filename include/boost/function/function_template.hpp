@@ -717,7 +717,7 @@ namespace boost {
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f
 #ifndef BOOST_NO_SFINAE
-                            ,typename enable_if<
+                            ,typename boost::enable_if<
                             typename boost::mpl::not_<
                              is_integral<Functor> >::type,
                                         int>::type = 0
@@ -730,7 +730,7 @@ namespace boost {
     template<typename Functor,typename Allocator>
     BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f, Allocator a
 #ifndef BOOST_NO_SFINAE
-                            ,typename enable_if<
+                            ,typename boost::enable_if<
                             typename boost::mpl::not_<
                               is_integral<Functor> >::type,
                                         int>::type = 0
@@ -780,7 +780,7 @@ namespace boost {
     // construct.
     template<typename Functor>
 #ifndef BOOST_NO_SFINAE
-    typename enable_if<
+    typename boost::enable_if<
                typename boost::mpl::not_<
                   is_integral<Functor> >::type,
                BOOST_FUNCTION_FUNCTION&>::type
@@ -1068,7 +1068,7 @@ public:
   template<typename Functor>
   function(Functor f
 #ifndef BOOST_NO_SFINAE
-           ,typename enable_if<
+           ,typename boost::enable_if<
                             typename boost::mpl::not_<
                           is_integral<Functor> >::type,
                        int>::type = 0
@@ -1080,7 +1080,7 @@ public:
   template<typename Functor,typename Allocator>
   function(Functor f, Allocator a
 #ifndef BOOST_NO_SFINAE
-           ,typename enable_if<
+           ,typename boost::enable_if<
                             typename boost::mpl::not_<
                            is_integral<Functor> >::type,
                        int>::type = 0
@@ -1120,7 +1120,7 @@ public:
 
   template<typename Functor>
 #ifndef BOOST_NO_SFINAE
-  typename enable_if<
+  typename boost::enable_if<
                             typename boost::mpl::not_<
                          is_integral<Functor> >::type,
                       self_type&>::type
