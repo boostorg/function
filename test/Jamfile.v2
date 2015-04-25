@@ -21,6 +21,8 @@ import testing ;
     : 
   [ run libs/function/test/function_test.cpp :  :  :  : lib_function_test ]
 
+  [ run libs/function/test/function_test.cpp :  :  : <rtti>off : lib_function_test_no_rtti ]
+
   [ run libs/function/test/function_n_test.cpp :  :  :  :  ]
 
   [ run libs/function/test/allocator_test.cpp ../../../libs/test/build//boost_test_exec_monitor :  :  :  :  ]
