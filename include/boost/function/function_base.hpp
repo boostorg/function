@@ -71,19 +71,10 @@
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // __ICL etc
 
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x5A0)
 #  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
       typename ::boost::enable_if_c<          \
                            !(::boost::is_integral<Functor>::value), \
                            Type>::type
-#else
-// BCC doesn't recognize this depends on a template argument and complains
-// about the use of 'typename'
-#  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)     \
-      ::boost::enable_if_c<          \
-                   !(::boost::is_integral<Functor>::value), \
-                       Type>::type
-#endif
 
 namespace boost {
   namespace detail {
