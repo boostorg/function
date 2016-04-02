@@ -16,7 +16,7 @@
 #if defined(BOOST_MSVC)
 #   pragma warning( push )
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
-#endif       
+#endif
 
 #define BOOST_FUNCTION_TEMPLATE_PARMS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, typename T)
 
@@ -132,7 +132,7 @@ namespace boost {
         {
           FunctionObj* f;
           if (function_allows_small_object_optimization<FunctionObj>::value)
-            f = reinterpret_cast<FunctionObj*>(&function_obj_ptr.data);
+            f = reinterpret_cast<FunctionObj*>(function_obj_ptr.data);
           else
             f = reinterpret_cast<FunctionObj*>(function_obj_ptr.obj_ptr);
           return (*f)(BOOST_FUNCTION_ARGS);
@@ -153,7 +153,7 @@ namespace boost {
         {
           FunctionObj* f;
           if (function_allows_small_object_optimization<FunctionObj>::value)
-            f = reinterpret_cast<FunctionObj*>(&function_obj_ptr.data);
+            f = reinterpret_cast<FunctionObj*>(function_obj_ptr.data);
           else
             f = reinterpret_cast<FunctionObj*>(function_obj_ptr.obj_ptr);
           BOOST_FUNCTION_RETURN((*f)(BOOST_FUNCTION_ARGS));
@@ -209,7 +209,7 @@ namespace boost {
 
         {
           MemberPtr* f = 
-            reinterpret_cast<MemberPtr*>(&function_obj_ptr.data);
+            reinterpret_cast<MemberPtr*>(function_obj_ptr.data);
           return boost::mem_fn(*f)(BOOST_FUNCTION_ARGS);
         }
       };
@@ -227,7 +227,7 @@ namespace boost {
 
         {
           MemberPtr* f = 
-            reinterpret_cast<MemberPtr*>(&function_obj_ptr.data);
+            reinterpret_cast<MemberPtr*>(function_obj_ptr.data);
           BOOST_FUNCTION_RETURN(boost::mem_fn(*f)(BOOST_FUNCTION_ARGS));
         }
       };
@@ -569,7 +569,7 @@ namespace boost {
         void 
         assign_functor(FunctionObj f, function_buffer& functor, mpl::true_) const
         {
-          new (reinterpret_cast<void*>(&functor.data)) FunctionObj(f);
+          new (reinterpret_cast<void*>(functor.data)) FunctionObj(f);
         }
         template<typename FunctionObj,typename Allocator>
         void 
@@ -752,14 +752,14 @@ namespace boost {
     {
       this->assign_to_own(f);
     }
-    
+
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     BOOST_FUNCTION_FUNCTION(BOOST_FUNCTION_FUNCTION&& f) : function_base()
     {
       this->move_assign(f);
     }
 #endif
-    
+
     ~BOOST_FUNCTION_FUNCTION() { clear(); }
 
     result_type operator()(BOOST_FUNCTION_PARMS) const
@@ -840,12 +840,11 @@ namespace boost {
       BOOST_CATCH_END
       return *this;
     }
-    
+
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     // Move assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(BOOST_FUNCTION_FUNCTION&& f)
     {
-      
       if (&f == this)
         return *this;
 
@@ -925,7 +924,7 @@ namespace boost {
                          template apply<Functor, R BOOST_FUNCTION_COMMA 
                         BOOST_FUNCTION_TEMPLATE_ARGS>
         handler_type;
-      
+
       typedef typename handler_type::invoker_type invoker_type;
       typedef typename handler_type::manager_type manager_type;
 
@@ -960,7 +959,7 @@ namespace boost {
                          BOOST_FUNCTION_TEMPLATE_ARGS,
                          Allocator>
         handler_type;
-      
+
       typedef typename handler_type::invoker_type invoker_type;
       typedef typename handler_type::manager_type manager_type;
 
@@ -987,7 +986,7 @@ namespace boost {
     // has its function object allocated on the heap, move_assign will pass 
     // its buffer to *this, and set the argument's buffer pointer to NULL. 
     void move_assign(BOOST_FUNCTION_FUNCTION& f) 
-    { 
+    {
       if (&f == this)
         return;
 
@@ -1098,7 +1097,7 @@ public:
   function(self_type&& f): base_type(static_cast<base_type&&>(f)){}
   function(base_type&& f): base_type(static_cast<base_type&&>(f)){}
 #endif
-  
+
   self_type& operator=(const self_type& f)
   {
     self_type(f).swap(*this);
@@ -1111,7 +1110,7 @@ public:
     self_type(static_cast<self_type&&>(f)).swap(*this);
     return *this;
   }
-#endif  
+#endif
 
   template<typename Functor>
 #ifndef BOOST_NO_SFINAE
@@ -1147,7 +1146,7 @@ public:
     self_type(static_cast<base_type&&>(f)).swap(*this);
     return *this;
   }
-#endif 
+#endif
 };
 
 #undef BOOST_FUNCTION_PARTIAL_SPEC
@@ -1187,4 +1186,4 @@ public:
 
 #if defined(BOOST_MSVC)
 #   pragma warning( pop )
-#endif       
+#endif

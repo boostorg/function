@@ -41,7 +41,7 @@
 #   pragma warning( push )
 #   pragma warning( disable : 4793 ) // complaint about native code generation
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
-#endif       
+#endif
 
 #if defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406 && !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_TARGET_FIX(x) x
@@ -68,7 +68,8 @@ namespace boost {
       union function_buffer
       {
         // For pointers to function objects
-        mutable void* obj_ptr;
+        typedef void* obj_ptr_t;
+        mutable obj_ptr_t obj_ptr;
 
         // For pointers to std::type_info objects
         struct type_t {
@@ -82,7 +83,8 @@ namespace boost {
         } type;
 
         // For function pointers of all kinds
-        mutable void (*func_ptr)();
+        typedef void (*func_ptr_t)();
+        mutable func_ptr_t func_ptr;
 
         // For bound member pointers
         struct bound_memfunc_ptr_t {
@@ -98,8 +100,16 @@ namespace boost {
           bool is_volatile_qualified;
         } obj_ref;
 
+        enum {
+          size1 = sizeof(obj_ptr_t) > sizeof(type_t) ? sizeof(obj_ptr_t) : sizeof(type_t),
+          size2 = size1 > sizeof(func_ptr_t) ? size1 : sizeof(func_ptr_t),
+          size3 = size2 > sizeof(bound_memfunc_ptr_t) ? size2 : sizeof(bound_memfunc_ptr_t),
+          size4 = size3 > sizeof(obj_ref_t) ? size3 : sizeof(obj_ref_t),
+          data_size = size4
+        };
+
         // To relax aliasing constraints
-        mutable char data;
+        mutable char data[data_size];
       };
 
       /**
@@ -277,28 +287,28 @@ namespace boost {
         {
           if (op == clone_functor_tag || op == move_functor_tag) {
             const functor_type* in_functor = 
-              reinterpret_cast<const functor_type*>(&in_buffer.data);
-            new (reinterpret_cast<void*>(&out_buffer.data)) functor_type(*in_functor);
+              reinterpret_cast<const functor_type*>(in_buffer.data);
+            new (reinterpret_cast<void*>(out_buffer.data)) functor_type(*in_functor);
 
             if (op == move_functor_tag) {
-              functor_type* f = reinterpret_cast<functor_type*>(&in_buffer.data);
+              functor_type* f = reinterpret_cast<functor_type*>(in_buffer.data);
               (void)f; // suppress warning about the value of f not being used (MSVC)
               f->~Functor();
             }
           } else if (op == destroy_functor_tag) {
             // Some compilers (Borland, vc6, ...) are unhappy with ~functor_type.
-             functor_type* f = reinterpret_cast<functor_type*>(&out_buffer.data);
+             functor_type* f = reinterpret_cast<functor_type*>(out_buffer.data);
              (void)f; // suppress warning about the value of f not being used (MSVC)
              f->~Functor();
           } else if (op == check_functor_type_tag) {
              if (*out_buffer.type.type == boost::typeindex::type_id<Functor>())
-              out_buffer.obj_ptr = &in_buffer.data;
+              out_buffer.obj_ptr = in_buffer.data;
             else
               out_buffer.obj_ptr = 0;
           } else /* op == get_functor_type_tag */ {
             out_buffer.type.type = &boost::typeindex::type_id<Functor>().type_info();
             out_buffer.type.const_qualified = false;
-            out_buffer.type.volatile_qualified = false;            
+            out_buffer.type.volatile_qualified = false;
           }
         }
       };
@@ -853,6 +863,6 @@ namespace detail {
 
 #if defined(BOOST_MSVC)
 #   pragma warning( pop )
-#endif       
+#endif
 
 #endif // BOOST_FUNCTION_BASE_HEADER
