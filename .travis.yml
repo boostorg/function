@@ -19,6 +19,7 @@ install:
   - cd ..
   - git clone -b $TRAVIS_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
   - cd boost-root
+  - git submodule init libs/algorithm
   - git submodule init libs/align
   - git submodule init libs/assert
   - git submodule init libs/bind
@@ -36,11 +37,13 @@ install:
   - git submodule init libs/numeric/conversion
   - git submodule init libs/predef
   - git submodule init libs/preprocessor
+  - git submodule init libs/range
   - git submodule init libs/ratio
   - git submodule init libs/rational
   - git submodule init libs/smart_ptr
   - git submodule init libs/static_assert
   - git submodule init libs/system
+  - git submodule init libs/optional
   - git submodule init libs/test
   - git submodule init libs/throw_exception
   - git submodule init libs/timer
