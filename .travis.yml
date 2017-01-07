@@ -54,7 +54,7 @@ install:
   - git submodule init libs/utility
   - git submodule init libs/winapi
   - git submodule init tools/build
-  - git submodule update --depth 1
+  - git submodule update
   - cp -r $TRAVIS_BUILD_DIR/* libs/function
   - ./bootstrap.sh
   - ./b2 headers
