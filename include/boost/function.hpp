@@ -9,6 +9,8 @@
 
 // William Kempf, Jesse Jones and Karl Nelson were all very helpful in the
 // design of this library.
+#ifndef BOOST_FUNCTION_HPP
+#define BOOST_FUNCTION_HPP
 
 #include <functional> // unary_function, binary_function
 
@@ -64,3 +66,5 @@
 #  include BOOST_PP_ITERATE()
 #  undef BOOST_PP_ITERATION_PARAMS_1
 #endif
+
+#endif // BOOST_FUNCTION_HPP
