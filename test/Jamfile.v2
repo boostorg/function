@@ -37,6 +37,8 @@ import testing ;
 
   [ compile libs/function/test/function_30.cpp :  :  :  :  ] 
 
+  [ compile libs/function/test/function_30_repeat.cpp :  :  :  :  ] 
+
   [ run libs/function/test/function_arith_cxx98.cpp :  :  :  :  ]
 
   [ run libs/function/test/function_arith_portable.cpp :  :  :  :  ]
