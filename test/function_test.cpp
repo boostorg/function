@@ -629,6 +629,17 @@ test_ref()
   }
 }
 
+#if BOOST_WORKAROUND(BOOST_GCC, >= 70000 && BOOST_GCC < 80000) && __cplusplus >= 201700
+
+// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81311
+#pragma message("Skipping test_empty_ref on g++ 7 -std=c++17")
+
+static void test_empty_ref()
+{
+}
+
+#else
+
 static void dummy() {}
 
 static void test_empty_ref()
@@ -651,6 +662,8 @@ static void test_empty_ref()
     BOOST_ERROR("Error calling referenced function.");
   }
 }
+
+#endif
 
 
 static void test_exception()
