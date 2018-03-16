@@ -992,7 +992,9 @@ namespace boost {
         if (!f.empty()) {
           this->vtable = f.vtable;
           if (this->has_trivial_copy_and_destroy())
-            this->functor = f.functor;
+            // Don't operate on storage directly since union type doesn't relax
+            // strict aliasing rules, despite of having member char type.
+            std::memcpy(this->functor.data, f.functor.data, sizeof(this->functor.data));
           else
             get_vtable()->base.manager(f.functor, this->functor,
                                      boost::detail::function::move_functor_tag);
