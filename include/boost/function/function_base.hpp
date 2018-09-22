@@ -30,7 +30,7 @@
 #include <boost/config/workaround.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #ifndef BOOST_NO_SFINAE
-#  include "boost/utility/enable_if.hpp"
+#include <boost/type_traits/enable_if.hpp>
 #else
 #  include "boost/mpl/bool.hpp"
 #endif
@@ -50,7 +50,7 @@
 #endif // __ICL etc
 
 #  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
-      typename ::boost::enable_if_c<          \
+      typename ::boost::enable_if_<          \
                            !(::boost::is_integral<Functor>::value), \
                            Type>::type
 
