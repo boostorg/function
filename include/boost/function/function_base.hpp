@@ -27,7 +27,7 @@
 #include <boost/type_traits/composite_traits.hpp>
 #include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/detail/workaround.hpp>
+#include <boost/config/workaround.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #ifndef BOOST_NO_SFINAE
 #  include "boost/utility/enable_if.hpp"
