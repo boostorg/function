@@ -240,7 +240,7 @@ namespace boost {
       >
       struct BOOST_FUNCTION_GET_FUNCTION_INVOKER
       {
-        typedef typename mpl::if_c<(is_void<R>::value),
+        typedef typename conditional<(is_void<R>::value),
                             BOOST_FUNCTION_VOID_FUNCTION_INVOKER<
                             FunctionPtr,
                             R BOOST_FUNCTION_COMMA
@@ -261,7 +261,7 @@ namespace boost {
        >
       struct BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER
       {
-        typedef typename mpl::if_c<(is_void<R>::value),
+        typedef typename conditional<(is_void<R>::value),
                             BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER<
                             FunctionObj,
                             R BOOST_FUNCTION_COMMA
@@ -282,7 +282,7 @@ namespace boost {
        >
       struct BOOST_FUNCTION_GET_FUNCTION_REF_INVOKER
       {
-        typedef typename mpl::if_c<(is_void<R>::value),
+        typedef typename conditional<(is_void<R>::value),
                             BOOST_FUNCTION_VOID_FUNCTION_REF_INVOKER<
                             FunctionObj,
                             R BOOST_FUNCTION_COMMA
@@ -305,7 +305,7 @@ namespace boost {
        >
       struct BOOST_FUNCTION_GET_MEMBER_INVOKER
       {
-        typedef typename mpl::if_c<(is_void<R>::value),
+        typedef typename conditional<(is_void<R>::value),
                             BOOST_FUNCTION_VOID_MEMBER_INVOKER<
                             MemberPtr,
                             R BOOST_FUNCTION_COMMA
@@ -567,27 +567,27 @@ namespace boost {
         // Assign to a function object using the small object optimization
         template<typename FunctionObj>
         void
-        assign_functor(FunctionObj f, function_buffer& functor, mpl::true_) const
+        assign_functor(FunctionObj f, function_buffer& functor, true_type) const
         {
           new (reinterpret_cast<void*>(functor.data)) FunctionObj(f);
         }
         template<typename FunctionObj,typename Allocator>
         void
-        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator, mpl::true_) const
+        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator, true_type) const
         {
-          assign_functor(f,functor,mpl::true_());
+          assign_functor(f,functor,true_type());
         }
 
         // Assign to a function object allocated on the heap.
         template<typename FunctionObj>
         void
-        assign_functor(FunctionObj f, function_buffer& functor, mpl::false_) const
+        assign_functor(FunctionObj f, function_buffer& functor, false_type) const
         {
           functor.members.obj_ptr = new FunctionObj(f);
         }
         template<typename FunctionObj,typename Allocator>
         void
-        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator a, mpl::false_) const
+        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator a, false_type) const
         {
           typedef functor_wrapper<FunctionObj,Allocator> functor_wrapper_type;
 #if defined(BOOST_NO_CXX11_ALLOCATOR)
@@ -615,7 +615,7 @@ namespace boost {
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
             assign_functor(f, functor,
-                           mpl::bool_<(function_allows_small_object_optimization<FunctionObj>::value)>());
+                           integral_constant<bool, (function_allows_small_object_optimization<FunctionObj>::value)>());
             return true;
           } else {
             return false;
@@ -627,7 +627,7 @@ namespace boost {
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
             assign_functor_a(f, functor, a,
-                           mpl::bool_<(function_allows_small_object_optimization<FunctionObj>::value)>());
+                           integral_constant<bool, (function_allows_small_object_optimization<FunctionObj>::value)>());
             return true;
           } else {
             return false;
