@@ -710,7 +710,7 @@ public: // should be protected, but GCC 2.95.3 will fail to allow access
  * The bad_function_call exception class is thrown when a boost::function
  * object is invoked
  */
-class bad_function_call : public std::runtime_error
+class BOOST_SYMBOL_VISIBLE bad_function_call : public std::runtime_error
 {
 public:
   bad_function_call() : std::runtime_error("call to empty boost::function") {}
