@@ -707,7 +707,7 @@ namespace boost {
 
     typedef BOOST_FUNCTION_FUNCTION self_type;
 
-    BOOST_FUNCTION_FUNCTION() : function_base() { }
+    BOOST_DEFAULTED_FUNCTION(BOOST_FUNCTION_FUNCTION(), : function_base() {})
 
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
@@ -1060,7 +1060,7 @@ class function<BOOST_FUNCTION_PARTIAL_SPEC>
 
 public:
 
-  function() : base_type() {}
+  BOOST_DEFAULTED_FUNCTION(function(), : base_type() {})
 
   template<typename Functor>
   function(Functor f
