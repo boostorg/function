@@ -624,7 +624,7 @@ test_ref()
     boost::function<int (int, int)> f(boost::ref(atc));
     BOOST_CHECK(f(1, 3) == 4);
   }
-  catch(std::runtime_error e) {
+  catch(std::runtime_error const&) {
     BOOST_ERROR("Nonthrowing constructor threw an exception");
   }
 }
@@ -651,14 +651,14 @@ static void test_empty_ref()
     f2();
     BOOST_ERROR("Exception didn't throw for reference to empty function.");
   }
-  catch(std::runtime_error e) {}
+  catch(std::runtime_error const&) {}
 
   f1 = dummy;
 
   try {
     f2();
   }
-  catch(std::runtime_error e) {
+  catch(std::runtime_error const&) {
     BOOST_ERROR("Error calling referenced function.");
   }
 }
@@ -673,7 +673,7 @@ static void test_exception()
     f(5, 4);
     BOOST_CHECK(false);
   }
-  catch(boost::bad_function_call) {
+  catch(boost::bad_function_call const&) {
     // okay
   }
 }

@@ -631,7 +631,7 @@ test_ref()
     boost::function2<int, int, int> f(ref(atc));
     BOOST_CHECK(f(1, 3) == 4);
   }
-  catch(std::runtime_error e) {
+  catch(std::runtime_error const&) {
     BOOST_ERROR("Nonthrowing constructor threw an exception");
   }
 }
