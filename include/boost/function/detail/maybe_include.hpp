@@ -7,7 +7,18 @@
 
 // For more information, see http://www.boost.org
 
-#if BOOST_FUNCTION_NUM_ARGS == 0
+#include <boost/function/function_fwd.hpp> // for BOOST_FUNCTION_NO_VARIADIC
+
+#ifndef BOOST_FUNCTION_NO_VARIADIC
+#  undef BOOST_FUNCTION_NUM_ARGS
+#  define BOOST_FUNCTION_NUM_ARGS 50
+#  undef BOOST_FUNCTION_MAX_ARGS_DEFINED
+#  define BOOST_FUNCTION_MAX_ARGS_DEFINED 50
+#  ifndef BOOST_FUNCTION_VARIADIC_INCLUDED
+#    define BOOST_FUNCTION_VARIADIC_INCLUDED
+#    include <boost/function/function_template.hpp>
+#  endif
+#elif BOOST_FUNCTION_NUM_ARGS == 0
 #  undef BOOST_FUNCTION_MAX_ARGS_DEFINED
 #  define BOOST_FUNCTION_MAX_ARGS_DEFINED 0
 #  ifndef BOOST_FUNCTION_0

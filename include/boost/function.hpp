@@ -29,8 +29,10 @@
 // in anything that may be included by function_template.hpp doesn't break
 #include <boost/function/detail/prologue.hpp>
 
+#ifndef BOOST_FUNCTION_NO_VARIADIC
+#  include <boost/function/detail/maybe_include.hpp>
 // Older Visual Age C++ version do not handle the file iteration well
-#if BOOST_WORKAROUND(__IBMCPP__, >= 500) && BOOST_WORKAROUND(__IBMCPP__, < 800)
+#elif BOOST_WORKAROUND(__IBMCPP__, >= 500) && BOOST_WORKAROUND(__IBMCPP__, < 800)
 #  if BOOST_FUNCTION_MAX_ARGS >= 0
 #    include <boost/function/function0.hpp>
 #  endif
