@@ -349,9 +349,8 @@ namespace boost {
           typedef functor_manager<FunctionPtr> manager_type;
         };
 
-        template<typename FunctionPtr,
-                 typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS,
-                 typename Allocator>
+        template<typename FunctionPtr, typename Allocator,
+                 typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
         struct apply_a
         {
           typedef typename BOOST_FUNCTION_GET_FUNCTION_INVOKER<
@@ -384,9 +383,8 @@ namespace boost {
           typedef functor_manager<MemberPtr> manager_type;
         };
 
-        template<typename MemberPtr,
-                 typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS,
-                 typename Allocator>
+        template<typename MemberPtr, typename Allocator,
+                 typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
         struct apply_a
         {
           typedef typename BOOST_FUNCTION_GET_MEMBER_INVOKER<
@@ -419,9 +417,8 @@ namespace boost {
           typedef functor_manager<FunctionObj> manager_type;
         };
 
-        template<typename FunctionObj,
-                 typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS,
-                 typename Allocator>
+        template<typename FunctionObj, typename Allocator,
+                 typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
         struct apply_a
         {
           typedef typename BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
@@ -453,9 +450,8 @@ namespace boost {
           typedef reference_manager<typename RefWrapper::type> manager_type;
         };
 
-        template<typename RefWrapper,
-                 typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS,
-                 typename Allocator>
+        template<typename RefWrapper, typename Allocator,
+                 typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
         struct apply_a
         {
           typedef typename BOOST_FUNCTION_GET_FUNCTION_REF_INVOKER<
@@ -954,9 +950,8 @@ namespace boost {
       typedef typename boost::detail::function::get_function_tag<Functor>::type tag;
       typedef boost::detail::function::BOOST_FUNCTION_GET_INVOKER<tag> get_invoker;
       typedef typename get_invoker::
-                         template apply_a<Functor, R BOOST_FUNCTION_COMMA
-                         BOOST_FUNCTION_TEMPLATE_ARGS,
-                         Allocator>
+                         template apply_a<Functor, Allocator, R BOOST_FUNCTION_COMMA
+                         BOOST_FUNCTION_TEMPLATE_ARGS>
         handler_type;
 
       typedef typename handler_type::invoker_type invoker_type;
