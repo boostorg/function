@@ -36,3 +36,8 @@ run nothrow_swap.cpp ;
 run rvalues_test.cpp ;
 compile function_typeof_test.cpp ;
 run result_arg_types_test.cpp ;
+
+lib throw_bad_function_call : throw_bad_function_call.cpp : <link>shared:<define>THROW_BAD_FUNCTION_CALL_DYN_LINK=1 ;
+
+run test_bad_function_call.cpp throw_bad_function_call : : : <link>shared : test_bad_function_call_shared ;
+run test_bad_function_call.cpp throw_bad_function_call : : : <link>static : test_bad_function_call_static ;
