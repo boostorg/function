@@ -1,0 +1,18 @@
+import testing ;
+
+variant ubsan_undefined
+    : release
+    :
+    <cxxflags>"-std=c++11 -Wno-unused -fstrict-aliasing -fno-omit-frame-pointer -fsanitize=undefined -fno-sanitize-recover=undefined"
+    <linkflags>"-fsanitize=undefined"
+    <debug-symbols>on
+    <define>BOOST_USE_ASAN=1
+    ;
+
+project
+    : requirements
+    <include>$(BOOST_ROOT)
+    <library>/boost/test//boost_unit_test_framework
+    ;
+
+run test.cpp ;
