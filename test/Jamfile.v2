@@ -36,3 +36,6 @@ run nothrow_swap.cpp ;
 run rvalues_test.cpp ;
 compile function_typeof_test.cpp ;
 run result_arg_types_test.cpp ;
+
+lib ubsan_invoker_lib : ubsan_invoker_lib.cpp ;
+run ubsan_invoker.cpp ubsan_invoker_lib ;
