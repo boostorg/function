@@ -36,3 +36,5 @@ run nothrow_swap.cpp ;
 run rvalues_test.cpp ;
 compile function_typeof_test.cpp ;
 run result_arg_types_test.cpp ;
+
+run boost_test_ubsan.cpp /boost/test//boost_unit_test_framework ;
