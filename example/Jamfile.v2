@@ -5,6 +5,7 @@
 #  Distributed under the Boost Software License, Version 1.0. (See accompany-
 #  ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+import ../../config/checks/config : requires ;
 import os ;
 import testing ;
 
@@ -13,7 +14,7 @@ project
     ;
 
 test-suite "function-examples"
-   :    [ run bind1st.cpp ]
+   :    [ run bind1st.cpp : : : [ requires cxx98_binders ] ]
         [ run int_div.cpp ]
         [ run sum_avg.cpp ]
    ;
