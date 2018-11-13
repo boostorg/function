@@ -7,11 +7,13 @@
 
 // For more information, see http://www.boost.org
 
-#include <boost/test/minimal.hpp>
 #include <boost/function.hpp>
+#include <boost/core/lightweight_test.hpp>
 #include <functional>
 #include <cassert>
 #include <string>
+
+#define BOOST_CHECK BOOST_TEST
 
 using namespace boost;
 using std::string;
@@ -684,7 +686,7 @@ void test_construct_destroy_count()
    BOOST_CHECK(construction_count == destruction_count);
 }
 
-int test_main(int, char* [])
+int main()
 {
   test_zero_args();
   test_one_arg();
@@ -693,5 +695,5 @@ int test_main(int, char* [])
   test_member_functions();
   test_ref();
   test_construct_destroy_count();
-  return 0;
+  return boost::report_errors();
 }
