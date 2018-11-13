@@ -7,11 +7,13 @@
 
 // For more information, see http://www.boost.org
 
-#include <boost/test/minimal.hpp>
 #include <boost/function.hpp>
+#include <boost/core/lightweight_test.hpp>
 #include <functional>
 #include <string>
 #include <utility>
+
+#define BOOST_CHECK BOOST_TEST
 
 using boost::function;
 using std::string;
@@ -792,7 +794,7 @@ static void test_move_semantics()
 #endif  
 }
 
-int test_main(int, char* [])
+int main()
 {
   test_zero_args();
   test_one_arg();
@@ -807,5 +809,5 @@ int test_main(int, char* [])
   test_move_semantics<function<void()> >();
   test_move_semantics<boost::function0<void> >();
 
-  return 0;
+  return boost::report_errors();
 }
