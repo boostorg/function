@@ -101,7 +101,7 @@ namespace boost {
         } obj_ref;
       };
 
-      union function_buffer
+      union BOOST_SYMBOL_VISIBLE function_buffer
       {
         // Type-specific union members
         mutable function_buffer_members members;
