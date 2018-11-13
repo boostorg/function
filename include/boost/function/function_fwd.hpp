@@ -24,12 +24,6 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
 #endif
 
-#if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) || defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
-#  define BOOST_FUNCTION_NO_VARIADIC
-#else
-#  include <boost/preprocessor/repetition/repeat.hpp> // for functionN aliases generation below
-#endif
-
 namespace boost {
   class bad_function_call;
 
@@ -44,15 +38,6 @@ namespace boost {
   }
 #endif // have partial specialization
 
-#ifndef BOOST_FUNCTION_NO_VARIADIC
-  template<typename R, typename... T> class function_n;
-#  define BOOST_FUNCTION_N_ALIASES(z, N, d)                                   \
-    template <typename R, typename... T>                                      \
-    using function##N = function_n<R, T...>;
-
-    BOOST_PP_REPEAT(51, BOOST_FUNCTION_N_ALIASES, ~)
-#  undef BOOST_FUNCTION_N_ALIASES
-#else
   // Portable syntax
   template<typename R> class function0;
   template<typename R, typename T1> class function1;
@@ -79,7 +64,6 @@ namespace boost {
            typename T5, typename T6, typename T7, typename T8, typename T9,
            typename T10> 
     class function10;
-#endif
 }
 
 #endif

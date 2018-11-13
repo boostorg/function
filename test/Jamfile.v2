@@ -11,7 +11,7 @@ import testing ;
 
 run function_test.cpp ;
 # /usr/include/c++/4.4/bits/shared_ptr.h:146: error: cannot use typeid with -fno-rtti
-run function_test.cpp : : : <rtti>off <toolset>gcc-4.4,<cxxstd>0x:<build>no : function_test_no_rtti ;
+run function_test.cpp : : : <rtti>off <toolset>gcc-4.4.7,<cxxstd>0x:<build>no : function_test_no_rtti ;
 run function_n_test.cpp ;
 run allocator_test.cpp ;
 run stateless_test.cpp ;
@@ -41,3 +41,19 @@ lib throw_bad_function_call : throw_bad_function_call.cpp : <link>shared:<define
 
 run test_bad_function_call.cpp throw_bad_function_call : : : <link>shared : test_bad_function_call_shared ;
 run test_bad_function_call.cpp throw_bad_function_call : : : <link>static : test_bad_function_call_static ;
+
+lib mixed_cxxstd : mixed_cxxstd.cpp : <link>shared:<define>MIXED_CXXSTD_DYN_LINK=1 ;
+
+run test_mixed_cxxstd.cpp mixed_cxxstd : : : <link>shared : mixed_cxxstd_shared ;
+run test_mixed_cxxstd.cpp mixed_cxxstd : : : <link>static : mixed_cxxstd_static ;
+
+run test_mixed_cxxstd.cpp mixed_cxxstd/<cxxstd>98 : : : <link>shared : mixed_cxxstd_shared_98 ;
+run test_mixed_cxxstd.cpp mixed_cxxstd/<cxxstd>98 : : : <link>static : mixed_cxxstd_static_98 ;
+
+run test_mixed_cxxstd.cpp mixed_cxxstd/<cxxstd>0x : : : <link>shared : mixed_cxxstd_shared_0x ;
+run test_mixed_cxxstd.cpp mixed_cxxstd/<cxxstd>0x : : : <link>static : mixed_cxxstd_static_0x ;
+
+local check14 = [ check-target-builds mixed_cxxstd/<cxxstd>14 : : <build>no ] ;
+
+run test_mixed_cxxstd.cpp mixed_cxxstd/<cxxstd>14 : : : <link>shared $(check14) : mixed_cxxstd_shared_14 ;
+run test_mixed_cxxstd.cpp mixed_cxxstd/<cxxstd>14 : : : <link>static $(check14) : mixed_cxxstd_static_14 ;
