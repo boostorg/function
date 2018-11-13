@@ -57,3 +57,8 @@ local check14 = [ check-target-builds mixed_cxxstd/<cxxstd>14 : : <build>no ] ;
 
 run test_mixed_cxxstd.cpp mixed_cxxstd/<cxxstd>14 : : : <link>shared $(check14) : mixed_cxxstd_shared_14 ;
 run test_mixed_cxxstd.cpp mixed_cxxstd/<cxxstd>14 : : : <link>static $(check14) : mixed_cxxstd_static_14 ;
+
+lib return_function : return_function.cpp : <link>shared:<define>RETURN_FUNCTION_DYN_LINK=1 ;
+
+run test_return_function.cpp return_function : : : <link>shared : return_function_shared ;
+run test_return_function.cpp return_function : : : <link>static : return_function_static ;
