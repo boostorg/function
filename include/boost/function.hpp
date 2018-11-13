@@ -31,7 +31,6 @@
 
 #ifndef BOOST_FUNCTION_NO_VARIADIC
 #  include <boost/function/detail/maybe_include.hpp>
-#  undef BOOST_FUNCTION_NUM_ARGS
 // Older Visual Age C++ version do not handle the file iteration well
 #elif BOOST_WORKAROUND(__IBMCPP__, >= 500) && BOOST_WORKAROUND(__IBMCPP__, < 800)
 #  if BOOST_FUNCTION_MAX_ARGS >= 0
