@@ -11,7 +11,7 @@ import testing ;
 
 run function_test.cpp ;
 # /usr/include/c++/4.4/bits/shared_ptr.h:146: error: cannot use typeid with -fno-rtti
-run function_test.cpp : : : <rtti>off <toolset>gcc-4.4,<cxxstd>0x:<build>no : function_test_no_rtti ;
+run function_test.cpp : : : <rtti>off <toolset>gcc-4.4.7,<cxxstd>0x:<build>no : function_test_no_rtti ;
 run function_n_test.cpp ;
 run allocator_test.cpp ;
 run stateless_test.cpp ;
