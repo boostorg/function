@@ -71,3 +71,5 @@ run test_return_function.cpp return_function/<cxxstd>0x : : : <link>static : ret
 
 run test_return_function.cpp return_function/<cxxstd>14 : : : <link>shared $(check14) : return_function_shared_14 ;
 run test_return_function.cpp return_function/<cxxstd>14 : : : <link>static $(check14) : return_function_static_14 ;
+
+run quick.cpp ;
