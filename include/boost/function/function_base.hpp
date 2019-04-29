@@ -400,7 +400,6 @@ namespace boost {
             out_buffer.members.type.type = &boost::typeindex::type_id<functor_type>().type_info();
             out_buffer.members.type.const_qualified = false;
             out_buffer.members.type.volatile_qualified = false;
-            return;
           } else {
             manager(in_buffer, out_buffer, op, tag_type());
           }
