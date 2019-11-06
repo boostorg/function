@@ -26,11 +26,11 @@ matrix:
   include:
     - os: linux
       compiler: g++
-      env: TOOLSET=gcc CXXSTD=03,11
+      env: TOOLSET=gcc CXXSTD=11
 
     - os: linux
       compiler: g++-4.4
-      env: TOOLSET=gcc CXXSTD=98,0x
+      env: TOOLSET=gcc CXXSTD=0x
       addons:
         apt:
           packages:
@@ -40,7 +40,7 @@ matrix:
 
     - os: linux
       compiler: g++-4.6
-      env: TOOLSET=gcc CXXSTD=03,0x
+      env: TOOLSET=gcc CXXSTD=0x
       addons:
         apt:
           packages:
@@ -50,7 +50,7 @@ matrix:
 
     - os: linux
       compiler: g++-4.7
-      env: TOOLSET=gcc CXXSTD=03,11
+      env: TOOLSET=gcc CXXSTD=11
       addons:
         apt:
           packages:
@@ -60,7 +60,7 @@ matrix:
 
     - os: linux
       compiler: g++-4.8
-      env: TOOLSET=gcc CXXSTD=03,11
+      env: TOOLSET=gcc CXXSTD=11
       addons:
         apt:
           packages:
@@ -69,7 +69,7 @@ matrix:
             - ubuntu-toolchain-r-test
     - os: linux
       compiler: g++-4.9
-      env: TOOLSET=gcc CXXSTD=03,11
+      env: TOOLSET=gcc CXXSTD=11
       addons:
         apt:
           packages:
@@ -79,7 +79,7 @@ matrix:
 
     - os: linux
       compiler: g++-5
-      env: TOOLSET=gcc CXXSTD=03,11,14,1z
+      env: TOOLSET=gcc CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -89,7 +89,7 @@ matrix:
 
     - os: linux
       compiler: g++-6
-      env: TOOLSET=gcc CXXSTD=03,11,14,1z
+      env: TOOLSET=gcc CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -99,7 +99,7 @@ matrix:
 
     - os: linux
       compiler: g++-7
-      env: TOOLSET=gcc CXXSTD=03,11,14,17
+      env: TOOLSET=gcc CXXSTD=11,14,17
       addons:
         apt:
           packages:
@@ -109,7 +109,7 @@ matrix:
 
     - os: linux
       compiler: g++-8
-      env: TOOLSET=gcc CXXSTD=03,11,14,17,2a
+      env: TOOLSET=gcc CXXSTD=11,14,17,2a
       addons:
         apt:
           packages:
@@ -119,7 +119,7 @@ matrix:
 
     - os: linux
       compiler: g++-9
-      env: TOOLSET=gcc CXXSTD=03,11,14,17,2a
+      env: TOOLSET=gcc CXXSTD=11,14,17,2a
       addons:
         apt:
           packages:
@@ -129,7 +129,7 @@ matrix:
 
     - os: linux
       compiler: g++-7
-      env: UBSAN=1 TOOLSET=gcc CXXSTD=03,11,14,17 UBSAN_OPTIONS=print_stacktrace=1 LINKFLAGS=-fuse-ld=gold
+      env: UBSAN=1 TOOLSET=gcc CXXSTD=11,14,17 UBSAN_OPTIONS=print_stacktrace=1 LINKFLAGS=-fuse-ld=gold
       addons:
         apt:
           packages:
@@ -139,11 +139,11 @@ matrix:
 
     - os: linux
       compiler: clang++
-      env: TOOLSET=clang CXXSTD=03,11
+      env: TOOLSET=clang CXXSTD=11
 
     - os: linux
       compiler: /usr/bin/clang++
-      env: TOOLSET=clang CXXSTD=03,11
+      env: TOOLSET=clang CXXSTD=11
       addons:
         apt:
           packages:
@@ -151,7 +151,7 @@ matrix:
 
     - os: linux
       compiler: /usr/bin/clang++
-      env: TOOLSET=clang CXXSTD=03,11
+      env: TOOLSET=clang CXXSTD=11
       addons:
         apt:
           packages:
@@ -159,7 +159,7 @@ matrix:
 
     - os: linux
       compiler: clang++-3.5
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -171,7 +171,7 @@ matrix:
 
     - os: linux
       compiler: clang++-3.6
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -182,7 +182,7 @@ matrix:
 
     - os: linux
       compiler: clang++-3.7
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -193,7 +193,7 @@ matrix:
 
     - os: linux
       compiler: clang++-3.8
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -205,7 +205,7 @@ matrix:
 
     - os: linux
       compiler: clang++-3.9
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -217,7 +217,7 @@ matrix:
 
     - os: linux
       compiler: clang++-4.0
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -228,7 +228,7 @@ matrix:
 
     - os: linux
       compiler: clang++-5.0
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -239,7 +239,7 @@ matrix:
 
     - os: linux
       compiler: clang++-6.0
-      env: TOOLSET=clang CXXSTD=03,11,14,17,2a
+      env: TOOLSET=clang CXXSTD=11,14,17,2a
       addons:
         apt:
           packages:
@@ -250,7 +250,7 @@ matrix:
 
     - os: linux
       compiler: clang++-7
-      env: TOOLSET=clang CXXSTD=03,11,14,17,2a
+      env: TOOLSET=clang CXXSTD=11,14,17,2a
       addons:
         apt:
           packages:
@@ -261,7 +261,7 @@ matrix:
 
     - os: linux
       compiler: clang++-8
-      env: TOOLSET=clang CXXSTD=03,11,14,17,2a
+      env: TOOLSET=clang CXXSTD=11,14,17,2a
       addons:
         apt:
           packages:
@@ -272,7 +272,7 @@ matrix:
 
     - os: linux
       compiler: clang++-8
-      env: UBSAN=1 TOOLSET=clang CXXSTD=03,11,14,17,2a UBSAN_OPTIONS=print_stacktrace=1
+      env: UBSAN=1 TOOLSET=clang CXXSTD=11,14,17,2a UBSAN_OPTIONS=print_stacktrace=1
       addons:
         apt:
           packages:
@@ -283,7 +283,7 @@ matrix:
 
     - os: linux
       compiler: clang++-libc++
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
       addons:
         apt:
           packages:
@@ -291,7 +291,7 @@ matrix:
 
     - os: linux
       compiler: clang++-libc++
-      env: UBSAN=1 TOOLSET=clang CXXSTD=03,11,14,1z UBSAN_OPTIONS=print_stacktrace=1
+      env: UBSAN=1 TOOLSET=clang CXXSTD=11,14,1z UBSAN_OPTIONS=print_stacktrace=1
       addons:
         apt:
           packages:
@@ -299,7 +299,7 @@ matrix:
 
     - os: osx
       compiler: clang++
-      env: TOOLSET=clang CXXSTD=03,11,14,1z
+      env: TOOLSET=clang CXXSTD=11,14,1z
 
 install:
   - BOOST_BRANCH=develop && [ "$TRAVIS_BRANCH" == "master" ] && BOOST_BRANCH=master || true
