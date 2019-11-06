@@ -9,6 +9,7 @@
 #ifndef BOOST_FUNCTION_FWD_HPP
 #define BOOST_FUNCTION_FWD_HPP
 #include <boost/config.hpp>
+#include <boost/function/detail/config.hpp>
 
 #if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_STRICT_CONFIG)
 // Work around a compiler bug.
@@ -24,8 +25,21 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
 #endif
 
+#if !BOOST_FUNCTION_ENABLE_CXX03
+# include <functional>
+#endif
+
 namespace boost {
+
+#if BOOST_FUNCTION_ENABLE_CXX03
+
   class bad_function_call;
+
+#else
+
+  using std::bad_function_call;
+
+#endif
 
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
   // Preferred syntax

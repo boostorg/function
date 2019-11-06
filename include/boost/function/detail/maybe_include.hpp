@@ -7,6 +7,10 @@
 
 // For more information, see http://www.boost.org
 
+#include <boost/function/detail/config.hpp>
+
+#if BOOST_FUNCTION_ENABLE_CXX03
+
 #if BOOST_FUNCTION_NUM_ARGS == 0
 #  undef BOOST_FUNCTION_MAX_ARGS_DEFINED
 #  define BOOST_FUNCTION_MAX_ARGS_DEFINED 0
@@ -366,4 +370,6 @@
 #  endif
 #else
 #  error Cannot handle Boost.Function objects that accept more than 50 arguments!
+#endif
+
 #endif
