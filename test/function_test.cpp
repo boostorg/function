@@ -9,6 +9,7 @@
 
 #include <boost/function.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/config/workaround.hpp>
 #include <functional>
 #include <string>
 #include <utility>
@@ -653,14 +654,14 @@ static void test_empty_ref()
     f2();
     BOOST_ERROR("Exception didn't throw for reference to empty function.");
   }
-  catch(std::runtime_error const&) {}
+  catch(boost::bad_function_call const&) {}
 
   f1 = dummy;
 
   try {
     f2();
   }
-  catch(std::runtime_error const&) {
+  catch(boost::bad_function_call const&) {
     BOOST_ERROR("Error calling referenced function.");
   }
 }

@@ -79,8 +79,10 @@ int main()
   function2<int, int, int> f;
   f.assign( plus_int<disable_small_object_optimization>(), counting_allocator<int>() );
   f.clear();
+#if BOOST_FUNCTION_ENABLE_CXX03
   BOOST_TEST_EQ( alloc_count, 1 );
   BOOST_TEST_EQ( dealloc_count, 1 );
+#endif
   alloc_count = 0;
   dealloc_count = 0;
   f.assign( plus_int<enable_small_object_optimization>(), counting_allocator<int>() );
@@ -106,8 +108,10 @@ int main()
   dealloc_count = 0;
   fv.assign( DoNothing<disable_small_object_optimization>(), counting_allocator<int>() );
   fv.clear();
+#if BOOST_FUNCTION_ENABLE_CXX03
   BOOST_TEST_EQ( alloc_count, 1 );
   BOOST_TEST_EQ( dealloc_count, 1 );
+#endif
   alloc_count = 0;
   dealloc_count = 0;
   fv.assign( DoNothing<enable_small_object_optimization>(), counting_allocator<int>() );
