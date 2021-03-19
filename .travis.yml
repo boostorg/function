@@ -326,6 +326,21 @@ matrix:
       compiler: clang++
       env: UBSAN=1 TOOLSET=clang CXXSTD=03,11,14,1z UBSAN_OPTIONS=print_stacktrace=1
 
+    - os: linux
+      env: CMAKE_TEST=1
+      script:
+        - mkdir __build__ && cd __build__
+        - cmake -DBOOST_ENABLE_CMAKE=1 -DBUILD_TESTING=ON -DBoost_VERBOSE=1 -DBOOST_INCLUDE_LIBRARIES=function ..
+        - ctest --output-on-failure -R boost_function
+
+    - os: linux
+      env: CMAKE_SUBDIR_TEST=1
+      script:
+      - cd libs/function/test/cmake_subdir_test && mkdir __build__ && cd __build__
+      - cmake ..
+      - cmake --build .
+      - cmake --build . --target check
+
 install:
   - BOOST_BRANCH=develop && [ "$TRAVIS_BRANCH" == "master" ] && BOOST_BRANCH=master || true
   - cd ..
