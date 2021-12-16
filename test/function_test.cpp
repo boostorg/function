@@ -7,8 +7,10 @@
 
 // For more information, see http://www.boost.org
 
-#if defined(__clang__)
-# pragma clang diagnostic ignored "-Wself-assign-overloaded"
+#if defined(__clang__) && defined(__has_warning)
+# if __has_warning( "-Wself-assign-overloaded" )
+#  pragma clang diagnostic ignored "-Wself-assign-overloaded"
+# endif
 #endif
 
 #include <boost/function.hpp>
