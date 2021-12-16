@@ -7,6 +7,10 @@
 
 // For more information, see http://www.boost.org
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wself-assign-overloaded"
+#endif
+
 #include <boost/function.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <functional>
