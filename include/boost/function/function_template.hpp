@@ -905,7 +905,11 @@ namespace boost {
 #           pragma GCC diagnostic push
             // This warning is technically correct, but we don't want to pay the price for initializing
             // just to silence a warning: https://github.com/boostorg/function/issues/27
-#           pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#           if (BOOST_GCC >= 120000)
+#             pragma GCC diagnostic ignored "-Wuninitialized"
+#           else
+#             pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#           endif
 #         endif
           std::memcpy(this->functor.data, f.functor.data, sizeof(boost::detail::function::function_buffer));
 #         if defined(BOOST_GCC) && (BOOST_GCC >= 40700)
@@ -1003,7 +1007,11 @@ namespace boost {
 #             pragma GCC diagnostic push
               // This warning is technically correct, but we don't want to pay the price for initializing
               // just to silence a warning: https://github.com/boostorg/function/issues/27
-#             pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#             if (BOOST_GCC >= 120000)
+#               pragma GCC diagnostic ignored "-Wuninitialized"
+#             else
+#               pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#             endif
 #           endif
             std::memcpy(this->functor.data, f.functor.data, sizeof(this->functor.data));
 #           if defined(BOOST_GCC) && (BOOST_GCC >= 40700)
