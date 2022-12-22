@@ -8,7 +8,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/function.hpp>
-#include <boost/core/is_same.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/core/lightweight_test_trait.hpp>
 
 struct X
@@ -27,14 +27,14 @@ int main()
 {
     typedef boost::function<X(Y)> F1;
 
-    BOOST_TEST_TRAIT_TRUE(( boost::core::is_same<F1::result_type, X> ));
-    BOOST_TEST_TRAIT_TRUE(( boost::core::is_same<F1::argument_type, Y> ));
+    BOOST_TEST_TRAIT_TRUE(( boost::is_same<F1::result_type, X> ));
+    BOOST_TEST_TRAIT_TRUE(( boost::is_same<F1::argument_type, Y> ));
 
     typedef boost::function<X(Y, Z)> F2;
 
-    BOOST_TEST_TRAIT_TRUE(( boost::core::is_same<F2::result_type, X> ));
-    BOOST_TEST_TRAIT_TRUE(( boost::core::is_same<F2::first_argument_type, Y> ));
-    BOOST_TEST_TRAIT_TRUE(( boost::core::is_same<F2::second_argument_type, Z> ));
+    BOOST_TEST_TRAIT_TRUE(( boost::is_same<F2::result_type, X> ));
+    BOOST_TEST_TRAIT_TRUE(( boost::is_same<F2::first_argument_type, Y> ));
+    BOOST_TEST_TRAIT_TRUE(( boost::is_same<F2::second_argument_type, Z> ));
 
     return boost::report_errors();
 }
