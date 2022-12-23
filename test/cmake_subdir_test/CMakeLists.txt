@@ -33,10 +33,8 @@ boost_add_subdir(typeof)
 
 boost_add_subdir(static_assert)
 boost_add_subdir(container_hash)
-boost_add_subdir(smart_ptr)
-boost_add_subdir(detail)
-boost_add_subdir(move)
-boost_add_subdir(predef)
+boost_add_subdir(describe)
+boost_add_subdir(mp11)
 
 # --target check
 
