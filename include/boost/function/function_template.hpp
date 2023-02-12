@@ -914,8 +914,8 @@ namespace boost {
             // This warning is technically correct, but we don't want to pay the price for initializing
             // just to silence a warning: https://github.com/boostorg/function/issues/27
 #           pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#           if (BOOST_GCC >= 120000)
-              // GCC 12 emits a different warning: https://github.com/boostorg/function/issues/42
+#           if (BOOST_GCC >= 110000)
+              // GCC 11.3, 12 emit a different warning: https://github.com/boostorg/function/issues/42
 #             pragma GCC diagnostic ignored "-Wuninitialized"
 #           endif
 #         endif
