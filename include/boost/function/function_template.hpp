@@ -501,8 +501,16 @@ namespace boost {
 
         void clear(function_buffer& functor) const
         {
+#if defined(BOOST_GCC) && (__GNUC__ >= 11)
+# pragma GCC diagnostic push
+// False positive in GCC 11/12 for empty function objects
+# pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
           if (base.manager)
             base.manager(functor, functor, destroy_functor_tag);
+#if defined(BOOST_GCC) && (__GNUC__ >= 11)
+# pragma GCC diagnostic pop
+#endif
         }
 
       private:
