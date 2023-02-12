@@ -84,3 +84,5 @@ run test_return_function.cpp return_function/<cxxstd>14 : : : <link>static $(che
 run quick.cpp ;
 
 compile issue_42.cpp ;
+
+run fn_eq_bind_test.cpp ;
