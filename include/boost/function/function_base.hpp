@@ -11,30 +11,27 @@
 #ifndef BOOST_FUNCTION_BASE_HEADER
 #define BOOST_FUNCTION_BASE_HEADER
 
-#include <stdexcept>
-#include <string>
-#include <memory>
-#include <new>
-#include <boost/config.hpp>
-#include <boost/assert.hpp>
+#include <boost/function/function_fwd.hpp>
+#include <boost/function_equal.hpp>
 #include <boost/type_index.hpp>
+#include <boost/ref.hpp>
 #include <boost/type_traits/has_trivial_copy.hpp>
 #include <boost/type_traits/has_trivial_destructor.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_volatile.hpp>
 #include <boost/type_traits/composite_traits.hpp>
-#include <boost/ref.hpp>
 #include <boost/type_traits/conditional.hpp>
-#include <boost/config/workaround.hpp>
 #include <boost/type_traits/alignment_of.hpp>
-#ifndef BOOST_NO_SFINAE
 #include <boost/type_traits/enable_if.hpp>
-#else
 #include <boost/type_traits/integral_constant.hpp>
-#endif
-#include <boost/function_equal.hpp>
-#include <boost/function/function_fwd.hpp>
+#include <boost/assert.hpp>
+#include <boost/config.hpp>
+#include <boost/config/workaround.hpp>
+#include <stdexcept>
+#include <string>
+#include <memory>
+#include <new>
 
 #if defined(BOOST_MSVC)
 #   pragma warning( push )
