@@ -17,7 +17,6 @@
 #include <new>
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
-#include <boost/integer.hpp>
 #include <boost/type_index.hpp>
 #include <boost/type_traits/has_trivial_copy.hpp>
 #include <boost/type_traits/has_trivial_destructor.hpp>
