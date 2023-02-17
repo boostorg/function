@@ -20,7 +20,6 @@ target_link_libraries(boost_function
     Boost::core
     Boost::preprocessor
     Boost::throw_exception
-    Boost::type_index
     Boost::type_traits
     Boost::typeof
 )
