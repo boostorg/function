@@ -18,16 +18,12 @@ config
 core
 preprocessor
 throw_exception
-type_index
 type_traits
 typeof
 
 # Secondary dependencies
 
 static_assert
-container_hash
-describe
-mp11
 )
 
 foreach(dep IN LISTS deps)
