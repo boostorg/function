@@ -90,3 +90,6 @@ run fn_eq_bind_test.cpp ;
 # /usr/include/c++/4.4/bits/shared_ptr.h:146: error: cannot use typeid with -fno-rtti
 run contains_test.cpp : : : <rtti>off <toolset>gcc-4.4,<cxxstd>0x:<build>no : contains_test_no_rtti ;
 run contains2_test.cpp : : : <rtti>off <toolset>gcc-4.4,<cxxstd>0x:<build>no : contains2_test_no_rtti ;
+
+run contains3_test.cpp ;
+run contains3_test.cpp : : : <rtti>off <toolset>gcc-4.4,<cxxstd>0x:<build>no : contains3_test_no_rtti ;
