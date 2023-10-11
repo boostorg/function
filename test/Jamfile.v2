@@ -43,7 +43,8 @@ run contains_test.cpp ;
 run contains2_test.cpp ;
 run nothrow_swap.cpp ;
 run rvalues_test.cpp ;
-compile function_typeof_test.cpp ;
+compile function_typeof_test.cpp
+   : <cxxstd>03:<build>no ;
 run result_arg_types_test.cpp ;
 
 lib throw_bad_function_call : throw_bad_function_call.cpp : <link>shared:<define>THROW_BAD_FUNCTION_CALL_DYN_LINK=1 ;
