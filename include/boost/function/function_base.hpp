@@ -649,7 +649,7 @@ public:
                       detail::function::check_functor_type_tag);
       // GCC 2.95.3 gets the CV qualifiers wrong here, so we
       // can't do the static_cast that we should do.
-      return static_cast<const Functor*>(type_result.members.obj_ptr);
+      return reinterpret_cast<const Functor*>(type_result.members.obj_ptr);
     }
 
   template<typename F>
