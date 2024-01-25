@@ -24,12 +24,6 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
 #endif
 
-#if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) || defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
-#  define BOOST_FUNCTION_NO_VARIADIC
-#else
-#  include <boost/preprocessor/repetition/repeat.hpp> // for functionN aliases generation below
-#endif
-
 namespace boost {
   class bad_function_call;
 
@@ -44,42 +38,43 @@ namespace boost {
   }
 #endif // have partial specialization
 
-#ifndef BOOST_FUNCTION_NO_VARIADIC
-  template<typename R, typename... T> class function_n;
-#  define BOOST_FUNCTION_N_ALIASES(z, N, d)                                   \
-    template <typename R, typename... T>                                      \
-    using function##N = function_n<R, T...>;
-
-    BOOST_PP_REPEAT(51, BOOST_FUNCTION_N_ALIASES, ~)
-#  undef BOOST_FUNCTION_N_ALIASES
-#else
   // Portable syntax
-  template<typename R> class function0;
-  template<typename R, typename T1> class function1;
-  template<typename R, typename T1, typename T2> class function2;
-  template<typename R, typename T1, typename T2, typename T3> class function3;
-  template<typename R, typename T1, typename T2, typename T3, typename T4> 
-    class function4;
-  template<typename R, typename T1, typename T2, typename T3, typename T4,
-           typename T5> 
-    class function5;
-  template<typename R, typename T1, typename T2, typename T3, typename T4,
-           typename T5, typename T6> 
-    class function6;
-  template<typename R, typename T1, typename T2, typename T3, typename T4,
-           typename T5, typename T6, typename T7> 
-    class function7;
-  template<typename R, typename T1, typename T2, typename T3, typename T4,
-           typename T5, typename T6, typename T7, typename T8> 
-    class function8;
-  template<typename R, typename T1, typename T2, typename T3, typename T4,
-           typename T5, typename T6, typename T7, typename T8, typename T9> 
-    class function9;
-  template<typename R, typename T1, typename T2, typename T3, typename T4,
-           typename T5, typename T6, typename T7, typename T8, typename T9,
-           typename T10> 
-    class function10;
-#endif
+  template<typename R, typename... T> class function_n;
+
+  template<typename R, typename... T> using function0 = function_n<R, T...>;
+  template<typename R, typename... T> using function1 = function_n<R, T...>;
+  template<typename R, typename... T> using function2 = function_n<R, T...>;
+  template<typename R, typename... T> using function3 = function_n<R, T...>;
+  template<typename R, typename... T> using function4 = function_n<R, T...>;
+  template<typename R, typename... T> using function5 = function_n<R, T...>;
+  template<typename R, typename... T> using function6 = function_n<R, T...>;
+  template<typename R, typename... T> using function7 = function_n<R, T...>;
+  template<typename R, typename... T> using function8 = function_n<R, T...>;
+  template<typename R, typename... T> using function9 = function_n<R, T...>;
+
+  template<typename R, typename... T> using function10 = function_n<R, T...>;
+  template<typename R, typename... T> using function11 = function_n<R, T...>;
+  template<typename R, typename... T> using function12 = function_n<R, T...>;
+  template<typename R, typename... T> using function13 = function_n<R, T...>;
+  template<typename R, typename... T> using function14 = function_n<R, T...>;
+  template<typename R, typename... T> using function15 = function_n<R, T...>;
+  template<typename R, typename... T> using function16 = function_n<R, T...>;
+  template<typename R, typename... T> using function17 = function_n<R, T...>;
+  template<typename R, typename... T> using function18 = function_n<R, T...>;
+  template<typename R, typename... T> using function19 = function_n<R, T...>;
+
+  template<typename R, typename... T> using function20 = function_n<R, T...>;
+  template<typename R, typename... T> using function21 = function_n<R, T...>;
+  template<typename R, typename... T> using function22 = function_n<R, T...>;
+  template<typename R, typename... T> using function23 = function_n<R, T...>;
+  template<typename R, typename... T> using function24 = function_n<R, T...>;
+  template<typename R, typename... T> using function25 = function_n<R, T...>;
+  template<typename R, typename... T> using function26 = function_n<R, T...>;
+  template<typename R, typename... T> using function27 = function_n<R, T...>;
+  template<typename R, typename... T> using function28 = function_n<R, T...>;
+  template<typename R, typename... T> using function29 = function_n<R, T...>;
+
+  template<typename R, typename... T> using function30 = function_n<R, T...>;
 }
 
 #endif
