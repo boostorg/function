@@ -18,6 +18,39 @@
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif
 
+#ifndef BOOST_FUNCTION_NO_VARIADIC
+
+#define BOOST_FUNCTION_TEMPLATE_PARMS typename... T
+#define BOOST_FUNCTION_TEMPLATE_ARGS T...
+#define BOOST_FUNCTION_PARMS T... a
+#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
+#   define BOOST_FUNCTION_ARGS a...
+#else
+#   define BOOST_FUNCTION_ARGS static_cast<T&&>(a)...
+#endif
+
+// Always have commas (zero args case is handled with variadics too)
+#define BOOST_FUNCTION_COMMA ,
+
+// Class names used in this version of the code
+#define BOOST_FUNCTION_FUNCTION                     function_n
+#define BOOST_FUNCTION_FUNCTION_INVOKER             function_invoker
+#define BOOST_FUNCTION_VOID_FUNCTION_INVOKER        void_function_invoker
+#define BOOST_FUNCTION_FUNCTION_OBJ_INVOKER         function_obj_invoker
+#define BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER    void_function_obj_invoker
+#define BOOST_FUNCTION_FUNCTION_REF_INVOKER         function_ref_invoker
+#define BOOST_FUNCTION_VOID_FUNCTION_REF_INVOKER    void_function_ref_invoker
+#define BOOST_FUNCTION_MEMBER_INVOKER               function_mem_invoker
+#define BOOST_FUNCTION_VOID_MEMBER_INVOKER          function_void_mem_invoker
+#define BOOST_FUNCTION_GET_FUNCTION_INVOKER         get_function_invoker
+#define BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER     get_function_obj_invoker
+#define BOOST_FUNCTION_GET_FUNCTION_REF_INVOKER     get_function_ref_invoker
+#define BOOST_FUNCTION_GET_MEMBER_INVOKER           get_member_invoker
+#define BOOST_FUNCTION_GET_INVOKER                  get_invoker
+#define BOOST_FUNCTION_VTABLE                       basic_vtable
+
+#else // BOOST_FUNCTION_NO_VARIADIC
+
 #define BOOST_FUNCTION_TEMPLATE_PARMS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, typename T)
 
 #define BOOST_FUNCTION_TEMPLATE_ARGS BOOST_PP_ENUM_PARAMS(BOOST_FUNCTION_NUM_ARGS, T)
@@ -74,6 +107,8 @@
 #define BOOST_FUNCTION_GET_INVOKER \
   BOOST_JOIN(get_invoker,BOOST_FUNCTION_NUM_ARGS)
 #define BOOST_FUNCTION_VTABLE BOOST_JOIN(basic_vtable,BOOST_FUNCTION_NUM_ARGS)
+
+#endif // BOOST_FUNCTION_NO_VARIADIC
 
 #ifndef BOOST_NO_VOID_RETURNS
 #  define BOOST_FUNCTION_VOID_RETURN_TYPE void
@@ -660,6 +695,26 @@ namespace boost {
         vtable_base base;
         invoker_type invoker;
       };
+
+#ifndef BOOST_FUNCTION_NO_VARIADIC
+      template <typename... T>
+      struct variadic_function_base
+      {};
+
+      template <typename T>
+      struct variadic_function_base<T>
+      {
+        typedef T argument_type;
+      };
+
+      template <typename T0, typename T1>
+      struct variadic_function_base<T0, T1>
+      {
+        typedef T0 first_argument_type;
+        typedef T1 second_argument_type;
+      };
+#endif
+
     } // end namespace function
   } // end namespace detail
 
@@ -668,6 +723,9 @@ namespace boost {
     BOOST_FUNCTION_TEMPLATE_PARMS
   >
   class BOOST_FUNCTION_FUNCTION : public function_base
+#ifndef BOOST_FUNCTION_NO_VARIADIC
+                                , public detail::function::variadic_function_base<T...>
+#endif
   {
   public:
 #ifndef BOOST_NO_VOID_RETURNS
@@ -690,14 +748,19 @@ namespace boost {
     struct clear_type {};
 
   public:
-    BOOST_STATIC_CONSTANT(int, args = BOOST_FUNCTION_NUM_ARGS);
-
     // add signature for boost::lambda
     template<typename Args>
     struct sig
     {
       typedef result_type type;
     };
+
+#ifndef BOOST_FUNCTION_NO_VARIADIC
+
+    static int const args = sizeof...(T);
+    static int const arity = sizeof...(T);
+
+#else
 
 #if BOOST_FUNCTION_NUM_ARGS == 1
     typedef T0 argument_type;
@@ -706,8 +769,11 @@ namespace boost {
     typedef T1 second_argument_type;
 #endif
 
+    BOOST_STATIC_CONSTANT(int, args = BOOST_FUNCTION_NUM_ARGS);
     BOOST_STATIC_CONSTANT(int, arity = BOOST_FUNCTION_NUM_ARGS);
     BOOST_FUNCTION_ARG_TYPES
+
+#endif
 
     typedef BOOST_FUNCTION_FUNCTION self_type;
 
