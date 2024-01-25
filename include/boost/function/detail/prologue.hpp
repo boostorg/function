@@ -9,7 +9,6 @@
 
 #ifndef BOOST_FUNCTION_PROLOGUE_HPP
 #define BOOST_FUNCTION_PROLOGUE_HPP
-#  include <boost/function/detail/requires_cxx11.hpp>
 #  include <boost/function/function_base.hpp>
 #  include <boost/mem_fn.hpp>
 #  include <boost/throw_exception.hpp>
