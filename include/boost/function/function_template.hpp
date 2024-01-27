@@ -697,7 +697,7 @@ namespace boost {
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f
+    BOOST_FUNCTION_FUNCTION(Functor f
 #ifndef BOOST_NO_SFINAE
                             ,typename boost::enable_if_<
                              !(is_integral<Functor>::value),
@@ -709,7 +709,7 @@ namespace boost {
       this->assign_to(f);
     }
     template<typename Functor,typename Allocator>
-    BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f, Allocator a
+    BOOST_FUNCTION_FUNCTION(Functor f, Allocator a
 #ifndef BOOST_NO_SFINAE
                             ,typename boost::enable_if_<
                               !(is_integral<Functor>::value),
@@ -766,7 +766,7 @@ namespace boost {
 #else
     BOOST_FUNCTION_FUNCTION&
 #endif
-    operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
+    operator=(Functor f)
     {
       this->clear();
       BOOST_TRY  {
@@ -779,7 +779,7 @@ namespace boost {
       return *this;
     }
     template<typename Functor,typename Allocator>
-    void assign(Functor BOOST_FUNCTION_TARGET_FIX(const &) f, Allocator a)
+    void assign(Functor f, Allocator a)
     {
       this->clear();
       BOOST_TRY{

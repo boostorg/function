@@ -40,11 +40,8 @@
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif
 
-#if defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406 && !defined(BOOST_STRICT_CONFIG)
-#  define BOOST_FUNCTION_TARGET_FIX(x) x
-#else
-#  define BOOST_FUNCTION_TARGET_FIX(x)
-#endif // __ICL etc
+// retained because used in a test
+#define BOOST_FUNCTION_TARGET_FIX(x)
 
 #  define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
       typename ::boost::enable_if_<          \
