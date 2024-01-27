@@ -113,30 +113,6 @@ namespace boost {
         mutable char data[sizeof(function_buffer_members)];
       };
 
-      /**
-       * The unusable class is a placeholder for unused function arguments
-       * It is also completely unusable except that it constructable from
-       * anything. This helps compilers without partial specialization to
-       * handle Boost.Function objects returning void.
-       */
-      struct unusable
-      {
-        unusable() {}
-        template<typename T> unusable(const T&) {}
-      };
-
-      /* Determine the return type. This supports compilers that do not support
-       * void returns or partial specialization by silently changing the return
-       * type to "unusable".
-       */
-      template<typename T> struct function_return_type { typedef T type; };
-
-      template<>
-      struct function_return_type<void>
-      {
-        typedef unusable type;
-      };
-
       // The operation type to perform on the given functor/function pointer
       enum functor_manager_operation_type {
         clone_functor_tag,
