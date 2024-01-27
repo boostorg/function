@@ -33,7 +33,7 @@ bool operator==(const ReturnInt& x, const ReturnInt& y)
 bool operator!=(const ReturnInt& x, const ReturnInt& y)
 { return x.value != y.value; }
 
-namespace contain_test {
+namespace contains_test {
 
 struct ReturnIntFE
 {
@@ -44,34 +44,10 @@ struct ReturnIntFE
   int value;
 };
 
-}
-
-#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-
-namespace contain_test {
-# ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 bool function_equal(const ReturnIntFE& x, const ReturnIntFE& y)
 { return x.value == y.value; }
-# else
-bool function_equal_impl(const ReturnIntFE& x, const ReturnIntFE& y, int)
-{ return x.value == y.value; }
-# endif // #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-}
-#else // BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-namespace boost {
-# ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-bool 
-function_equal(const contain_test::ReturnIntFE& x, 
-               const contain_test::ReturnIntFE& y)
-{ return x.value == y.value; }
-# else
-bool 
-function_equal_impl(const contain_test::ReturnIntFE& x, 
-                    const contain_test::ReturnIntFE& y, int)
-{ return x.value == y.value; }
-# endif
-}
-#endif
+
+} // namespace contains_test
 
 static void target_test()
 {
@@ -123,15 +99,15 @@ static void equal_test()
 
   BOOST_CHECK(f.contains(ReturnInt(17)));
 
-  f = contain_test::ReturnIntFE(17);
+  f = contains_test::ReturnIntFE(17);
   BOOST_CHECK(f != &forty_two);
-  BOOST_CHECK(f == contain_test::ReturnIntFE(17));
-  BOOST_CHECK(f != contain_test::ReturnIntFE(16));
+  BOOST_CHECK(f == contains_test::ReturnIntFE(17));
+  BOOST_CHECK(f != contains_test::ReturnIntFE(16));
   BOOST_CHECK(&forty_two != f);
-  BOOST_CHECK(contain_test::ReturnIntFE(17) == f);
-  BOOST_CHECK(contain_test::ReturnIntFE(16) != f);
+  BOOST_CHECK(contains_test::ReturnIntFE(17) == f);
+  BOOST_CHECK(contains_test::ReturnIntFE(16) != f);
 
-  BOOST_CHECK(f.contains(contain_test::ReturnIntFE(17)));
+  BOOST_CHECK(f.contains(contains_test::ReturnIntFE(17)));
 
   boost::function<int(void)> g;
 
