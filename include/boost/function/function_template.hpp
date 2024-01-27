@@ -698,11 +698,9 @@ namespace boost {
     // one with a default parameter.
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION(Functor f
-#ifndef BOOST_NO_SFINAE
                             ,typename boost::enable_if_<
                              !(is_integral<Functor>::value),
                                         int>::type = 0
-#endif // BOOST_NO_SFINAE
                             ) :
       function_base()
     {
@@ -710,25 +708,16 @@ namespace boost {
     }
     template<typename Functor,typename Allocator>
     BOOST_FUNCTION_FUNCTION(Functor f, Allocator a
-#ifndef BOOST_NO_SFINAE
                             ,typename boost::enable_if_<
                               !(is_integral<Functor>::value),
                                         int>::type = 0
-#endif // BOOST_NO_SFINAE
                             ) :
       function_base()
     {
       this->assign_to_a(f,a);
     }
 
-#ifndef BOOST_NO_SFINAE
     BOOST_FUNCTION_FUNCTION(clear_type*) : function_base() { }
-#else
-    BOOST_FUNCTION_FUNCTION(int zero) : function_base()
-    {
-      BOOST_ASSERT(zero == 0);
-    }
-#endif
 
     BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) : function_base()
     {
@@ -759,13 +748,9 @@ namespace boost {
     // handle BOOST_FUNCTION_FUNCTION as the type of the temporary to
     // construct.
     template<typename Functor>
-#ifndef BOOST_NO_SFINAE
     typename boost::enable_if_<
                   !(is_integral<Functor>::value),
                BOOST_FUNCTION_FUNCTION&>::type
-#else
-    BOOST_FUNCTION_FUNCTION&
-#endif
     operator=(Functor f)
     {
       this->clear();
@@ -791,20 +776,11 @@ namespace boost {
       BOOST_CATCH_END
     }
 
-#ifndef BOOST_NO_SFINAE
     BOOST_FUNCTION_FUNCTION& operator=(clear_type*)
     {
       this->clear();
       return *this;
     }
-#else
-    BOOST_FUNCTION_FUNCTION& operator=(int zero)
-    {
-      BOOST_ASSERT(zero == 0);
-      this->clear();
-      return *this;
-    }
-#endif
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
@@ -1082,30 +1058,24 @@ public:
 
   template<typename Functor>
   function(Functor f
-#ifndef BOOST_NO_SFINAE
            ,typename boost::enable_if_<
                           !(is_integral<Functor>::value),
                        int>::type = 0
-#endif
            ) :
     base_type(f)
   {
   }
   template<typename Functor,typename Allocator>
   function(Functor f, Allocator a
-#ifndef BOOST_NO_SFINAE
            ,typename boost::enable_if_<
                            !(is_integral<Functor>::value),
                        int>::type = 0
-#endif
            ) :
     base_type(f,a)
   {
   }
 
-#ifndef BOOST_NO_SFINAE
   function(clear_type*) : base_type() {}
-#endif
 
   function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
 
@@ -1132,26 +1102,20 @@ public:
 #endif
 
   template<typename Functor>
-#ifndef BOOST_NO_SFINAE
   typename boost::enable_if_<
                          !(is_integral<Functor>::value),
                       self_type&>::type
-#else
-  self_type&
-#endif
   operator=(Functor f)
   {
     self_type(f).swap(*this);
     return *this;
   }
 
-#ifndef BOOST_NO_SFINAE
   self_type& operator=(clear_type*)
   {
     this->clear();
     return *this;
   }
-#endif
 
   self_type& operator=(const base_type& f)
   {

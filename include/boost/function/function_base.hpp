@@ -522,65 +522,6 @@ namespace boost {
       // A type that is only used for comparisons against zero
       struct useless_clear_type {};
 
-#ifdef BOOST_NO_SFINAE
-      // These routines perform comparisons between a Boost.Function
-      // object and an arbitrary function object (when the last
-      // parameter is false_type) or against zero (when the
-      // last parameter is true_type). They are only necessary
-      // for compilers that don't support SFINAE.
-      template<typename Function, typename Functor>
-        bool
-        compare_equal(const Function& f, const Functor&, int, true_type)
-        { return f.empty(); }
-
-      template<typename Function, typename Functor>
-        bool
-        compare_not_equal(const Function& f, const Functor&, int,
-                          true_type)
-        { return !f.empty(); }
-
-      template<typename Function, typename Functor>
-        bool
-        compare_equal(const Function& f, const Functor& g, long,
-                      false_type)
-        {
-          if (const Functor* fp = f.template target<Functor>())
-            return function_equal(*fp, g);
-          else return false;
-        }
-
-      template<typename Function, typename Functor>
-        bool
-        compare_equal(const Function& f, const reference_wrapper<Functor>& g,
-                      int, false_type)
-        {
-          if (const Functor* fp = f.template target<Functor>())
-            return fp == g.get_pointer();
-          else return false;
-        }
-
-      template<typename Function, typename Functor>
-        bool
-        compare_not_equal(const Function& f, const Functor& g, long,
-                          false_type)
-        {
-          if (const Functor* fp = f.template target<Functor>())
-            return !function_equal(*fp, g);
-          else return true;
-        }
-
-      template<typename Function, typename Functor>
-        bool
-        compare_not_equal(const Function& f,
-                          const reference_wrapper<Functor>& g, int,
-                          false_type)
-        {
-          if (const Functor* fp = f.template target<Functor>())
-            return fp != g.get_pointer();
-          else return true;
-        }
-#endif // BOOST_NO_SFINAE
-
       /**
        * Stores the "manager" portion of the vtable for a
        * boost::function object.
@@ -705,7 +646,6 @@ public:
 #   pragma clang diagnostic pop
 #endif
 
-#ifndef BOOST_NO_SFINAE
 inline bool operator==(const function_base& f,
                        detail::function::useless_clear_type*)
 {
@@ -729,38 +669,6 @@ inline bool operator!=(detail::function::useless_clear_type*,
 {
   return !f.empty();
 }
-#endif
-
-#ifdef BOOST_NO_SFINAE
-// Comparisons between boost::function objects and arbitrary function objects
-template<typename Functor>
-  inline bool operator==(const function_base& f, Functor g)
-  {
-    typedef integral_constant<bool, (is_integral<Functor>::value)> integral;
-    return detail::function::compare_equal(f, g, 0, integral());
-  }
-
-template<typename Functor>
-  inline bool operator==(Functor g, const function_base& f)
-  {
-    typedef integral_constant<bool, (is_integral<Functor>::value)> integral;
-    return detail::function::compare_equal(f, g, 0, integral());
-  }
-
-template<typename Functor>
-  inline bool operator!=(const function_base& f, Functor g)
-  {
-    typedef integral_constant<bool, (is_integral<Functor>::value)> integral;
-    return detail::function::compare_not_equal(f, g, 0, integral());
-  }
-
-template<typename Functor>
-  inline bool operator!=(Functor g, const function_base& f)
-  {
-    typedef integral_constant<bool, (is_integral<Functor>::value)> integral;
-    return detail::function::compare_not_equal(f, g, 0, integral());
-  }
-#else
 
 // Comparisons between boost::function objects and arbitrary function
 // objects.
@@ -836,8 +744,6 @@ template<typename Functor>
       return g.get_pointer() != fp;
     else return true;
   }
-
-#endif // Compiler supporting SFINAE
 
 namespace detail {
   namespace function {
