@@ -10,15 +10,6 @@
 #define BOOST_FUNCTION_FWD_HPP
 #include <boost/config.hpp>
 
-#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_STRICT_CONFIG)
-// Work around a compiler bug.
-// boost::python::objects::function has to be seen by the compiler before the
-// boost::function class template.
-namespace boost { namespace python { namespace objects {
-  class function;
-}}}
-#endif
-
 #if defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)                         \
  || !(defined(BOOST_STRICT_CONFIG) || !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540)
 #  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
