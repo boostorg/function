@@ -21,11 +21,7 @@
 #define BOOST_FUNCTION_TEMPLATE_PARMS typename... T
 #define BOOST_FUNCTION_TEMPLATE_ARGS T...
 #define BOOST_FUNCTION_PARMS T... a
-#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
-#   define BOOST_FUNCTION_ARGS a...
-#else
-#   define BOOST_FUNCTION_ARGS static_cast<T&&>(a)...
-#endif
+#define BOOST_FUNCTION_ARGS static_cast<T&&>(a)...
 
 // Always have commas (zero args case is handled with variadics too)
 #define BOOST_FUNCTION_COMMA ,
@@ -710,12 +706,10 @@ namespace boost {
       this->assign_to_own(f);
     }
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     BOOST_FUNCTION_FUNCTION(BOOST_FUNCTION_FUNCTION&& f) : function_base()
     {
       this->move_assign(f);
     }
-#endif
 
     ~BOOST_FUNCTION_FUNCTION() { clear(); }
 
@@ -785,7 +779,6 @@ namespace boost {
       return *this;
     }
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     // Move assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(BOOST_FUNCTION_FUNCTION&& f)
     {
@@ -802,7 +795,6 @@ namespace boost {
       BOOST_CATCH_END
       return *this;
     }
-#endif
 
     void swap(BOOST_FUNCTION_FUNCTION& other)
     {
@@ -1061,11 +1053,9 @@ public:
 
   function(const base_type& f) : base_type(static_cast<const base_type&>(f)){}
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
   // Move constructors
   function(self_type&& f): base_type(static_cast<base_type&&>(f)){}
   function(base_type&& f): base_type(static_cast<base_type&&>(f)){}
-#endif
 
   self_type& operator=(const self_type& f)
   {
@@ -1073,13 +1063,11 @@ public:
     return *this;
   }
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
   self_type& operator=(self_type&& f)
   {
     self_type(static_cast<self_type&&>(f)).swap(*this);
     return *this;
   }
-#endif
 
   template<typename Functor>
   typename boost::enable_if_<
@@ -1103,13 +1091,11 @@ public:
     return *this;
   }
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
   self_type& operator=(base_type&& f)
   {
     self_type(static_cast<base_type&&>(f)).swap(*this);
     return *this;
   }
-#endif
 };
 
 #undef BOOST_FUNCTION_PARTIAL_SPEC
