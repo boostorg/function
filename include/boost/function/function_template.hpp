@@ -47,13 +47,8 @@
 #define BOOST_FUNCTION_GET_INVOKER                  get_invoker
 #define BOOST_FUNCTION_VTABLE                       basic_vtable
 
-#ifndef BOOST_NO_VOID_RETURNS
-#  define BOOST_FUNCTION_VOID_RETURN_TYPE void
-#  define BOOST_FUNCTION_RETURN(X) X
-#else
-#  define BOOST_FUNCTION_VOID_RETURN_TYPE boost::detail::function::unusable
-#  define BOOST_FUNCTION_RETURN(X) X; return BOOST_FUNCTION_VOID_RETURN_TYPE ()
-#endif
+#define BOOST_FUNCTION_VOID_RETURN_TYPE void
+#define BOOST_FUNCTION_RETURN(X) X
 
 namespace boost {
   namespace detail {
@@ -448,11 +443,7 @@ namespace boost {
       template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
       struct BOOST_FUNCTION_VTABLE
       {
-#ifndef BOOST_NO_VOID_RETURNS
         typedef R         result_type;
-#else
-        typedef typename function_return_type<R>::type result_type;
-#endif // BOOST_NO_VOID_RETURNS
 
         typedef result_type (*invoker_type)(function_buffer&
                                             BOOST_FUNCTION_COMMA
@@ -661,12 +652,7 @@ namespace boost {
                                 , public detail::function::variadic_function_base<T...>
   {
   public:
-#ifndef BOOST_NO_VOID_RETURNS
     typedef R         result_type;
-#else
-    typedef  typename boost::detail::function::function_return_type<R>::type
-      result_type;
-#endif // BOOST_NO_VOID_RETURNS
 
   private:
     typedef boost::detail::function::BOOST_FUNCTION_VTABLE<
