@@ -133,7 +133,6 @@ static void equal_test()
 
   BOOST_CHECK(f.contains(contain_test::ReturnIntFE(17)));
 
-#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
   boost::function<int(void)> g;
 
   g = &forty_two;
@@ -149,7 +148,6 @@ static void equal_test()
   BOOST_CHECK(&forty_two != g);
   BOOST_CHECK(ReturnInt(17) == g);
   BOOST_CHECK(ReturnInt(16) != g);
-#endif
 }
 
 static void ref_equal_test()
@@ -180,7 +178,6 @@ static void ref_equal_test()
     BOOST_CHECK(!(ri2 != f));
   }
 
-#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
   {
     ReturnInt ri(17);
     boost::function<int(void)> f = boost::ref(ri);
@@ -206,7 +203,6 @@ static void ref_equal_test()
     BOOST_CHECK(ri2 == f);
     BOOST_CHECK(!(ri2 != f));
   }
-#endif
 }
 
 int main()

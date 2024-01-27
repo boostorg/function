@@ -10,8 +10,6 @@
 // Resolve C++20 issue with fn == bind(...)
 // https://github.com/boostorg/function/issues/45
 
-#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
-
 namespace boost
 {
 
@@ -33,7 +31,5 @@ template<class S, class R, class F, class L> bool operator!=( function<S> const&
 }
 
 } // namespace boost
-
-#endif // #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
 
 #endif // #ifndef BOOST_FUNCTION_EPILOGUE_HPP

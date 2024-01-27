@@ -10,15 +10,9 @@
 #define BOOST_FUNCTION_FWD_HPP
 #include <boost/config.hpp>
 
-#if defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)                         \
- || !(defined(BOOST_STRICT_CONFIG) || !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540)
-#  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
-#endif
-
 namespace boost {
   class bad_function_call;
 
-#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
   // Preferred syntax
   template<typename Signature> class function;
 
@@ -27,7 +21,6 @@ namespace boost {
   {
     f1.swap(f2);
   }
-#endif // have partial specialization
 
   // Portable syntax
   template<typename R, typename... T> class function_n;

@@ -1020,13 +1020,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
                           R BOOST_FUNCTION_COMMA
                           BOOST_FUNCTION_TEMPLATE_ARGS>& );
 
-#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
-
-#if BOOST_FUNCTION_NUM_ARGS == 0
-#define BOOST_FUNCTION_PARTIAL_SPEC R (void)
-#else
 #define BOOST_FUNCTION_PARTIAL_SPEC R (BOOST_FUNCTION_TEMPLATE_ARGS)
-#endif
 
 template<typename R BOOST_FUNCTION_COMMA
          BOOST_FUNCTION_TEMPLATE_PARMS>
@@ -1119,7 +1113,6 @@ public:
 };
 
 #undef BOOST_FUNCTION_PARTIAL_SPEC
-#endif // have partial specialization
 
 } // end namespace boost
 
