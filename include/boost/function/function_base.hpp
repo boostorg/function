@@ -674,29 +674,6 @@ public:
       }
     }
 
-#if defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3
-  // GCC 3.3 and newer cannot copy with the global operator==, due to
-  // problems with instantiation of function return types before it
-  // has been verified that the argument types match up.
-  template<typename Functor>
-    BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
-    operator==(Functor g) const
-    {
-      if (const Functor* fp = target<Functor>())
-        return function_equal(*fp, g);
-      else return false;
-    }
-
-  template<typename Functor>
-    BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
-    operator!=(Functor g) const
-    {
-      if (const Functor* fp = target<Functor>())
-        return !function_equal(*fp, g);
-      else return true;
-    }
-#endif
-
 public: // should be protected, but GCC 2.95.3 will fail to allow access
   detail::function::vtable_base* get_vtable() const {
     return reinterpret_cast<detail::function::vtable_base*>(
@@ -785,10 +762,9 @@ template<typename Functor>
   }
 #else
 
-#  if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
 // Comparisons between boost::function objects and arbitrary function
-// objects. GCC 3.3 and before has an obnoxious bug that prevents this
-// from working.
+// objects.
+
 template<typename Functor>
   BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
   operator==(const function_base& f, Functor g)
@@ -824,7 +800,6 @@ template<typename Functor>
       return !function_equal(g, *fp);
     else return true;
   }
-#  endif
 
 template<typename Functor>
   BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
