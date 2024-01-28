@@ -18,8 +18,6 @@
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif
 
-#define BOOST_FUNCTION_ARGS static_cast<T&&>(a)...
-
 #define BOOST_FUNCTION_VOID_RETURN_TYPE void
 #define BOOST_FUNCTION_RETURN(X) X
 
@@ -37,7 +35,7 @@ namespace boost {
                         T... a)
         {
           FunctionPtr f = reinterpret_cast<FunctionPtr>(function_ptr.members.func_ptr);
-          return f(BOOST_FUNCTION_ARGS);
+          return f(static_cast<T&&>(a)...);
         }
       };
 
@@ -54,7 +52,7 @@ namespace boost {
 
         {
           FunctionPtr f = reinterpret_cast<FunctionPtr>(function_ptr.members.func_ptr);
-          BOOST_FUNCTION_RETURN(f(BOOST_FUNCTION_ARGS));
+          BOOST_FUNCTION_RETURN(f(static_cast<T&&>(a)...));
         }
       };
 
@@ -74,7 +72,7 @@ namespace boost {
             f = reinterpret_cast<FunctionObj*>(function_obj_ptr.data);
           else
             f = reinterpret_cast<FunctionObj*>(function_obj_ptr.members.obj_ptr);
-          return (*f)(BOOST_FUNCTION_ARGS);
+          return (*f)(static_cast<T&&>(a)...);
         }
       };
 
@@ -95,7 +93,7 @@ namespace boost {
             f = reinterpret_cast<FunctionObj*>(function_obj_ptr.data);
           else
             f = reinterpret_cast<FunctionObj*>(function_obj_ptr.members.obj_ptr);
-          BOOST_FUNCTION_RETURN((*f)(BOOST_FUNCTION_ARGS));
+          BOOST_FUNCTION_RETURN((*f)(static_cast<T&&>(a)...));
         }
       };
 
@@ -112,7 +110,7 @@ namespace boost {
         {
           FunctionObj* f =
             reinterpret_cast<FunctionObj*>(function_obj_ptr.members.obj_ptr);
-          return (*f)(BOOST_FUNCTION_ARGS);
+          return (*f)(static_cast<T&&>(a)...);
         }
       };
 
@@ -130,7 +128,7 @@ namespace boost {
         {
           FunctionObj* f =
             reinterpret_cast<FunctionObj*>(function_obj_ptr.members.obj_ptr);
-          BOOST_FUNCTION_RETURN((*f)(BOOST_FUNCTION_ARGS));
+          BOOST_FUNCTION_RETURN((*f)(static_cast<T&&>(a)...));
         }
       };
 
@@ -149,7 +147,7 @@ namespace boost {
         {
           MemberPtr* f =
             reinterpret_cast<MemberPtr*>(function_obj_ptr.data);
-          return boost::mem_fn(*f)(BOOST_FUNCTION_ARGS);
+          return boost::mem_fn(*f)(static_cast<T&&>(a)...);
         }
       };
 
@@ -167,7 +165,7 @@ namespace boost {
         {
           MemberPtr* f =
             reinterpret_cast<MemberPtr*>(function_obj_ptr.data);
-          BOOST_FUNCTION_RETURN(boost::mem_fn(*f)(BOOST_FUNCTION_ARGS));
+          BOOST_FUNCTION_RETURN(boost::mem_fn(*f)(static_cast<T&&>(a)...));
         }
       };
 #endif
@@ -689,7 +687,7 @@ namespace boost {
         boost::throw_exception(bad_function_call());
 
       return get_vtable()->invoker
-               (this->functor, BOOST_FUNCTION_ARGS);
+               (this->functor, static_cast<T&&>(a)...);
     }
 
     // The distinction between when to use function_n and
@@ -1060,7 +1058,6 @@ public:
 #ifdef BOOST_FUNCTION_ARG
 #   undef BOOST_FUNCTION_ARG
 #endif
-#undef BOOST_FUNCTION_ARGS
 #undef BOOST_FUNCTION_ARG_TYPE
 #undef BOOST_FUNCTION_ARG_TYPES
 #undef BOOST_FUNCTION_VOID_RETURN_TYPE
