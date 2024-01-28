@@ -18,7 +18,6 @@
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif
 
-#define BOOST_FUNCTION_TEMPLATE_ARGS T...
 #define BOOST_FUNCTION_PARMS T... a
 #define BOOST_FUNCTION_ARGS static_cast<T&&>(a)...
 
@@ -185,12 +184,12 @@ namespace boost {
                             void_function_invoker<
                             FunctionPtr,
                             R,
-                            BOOST_FUNCTION_TEMPLATE_ARGS
+                            T...
                           >,
                           function_invoker<
                             FunctionPtr,
                             R,
-                            BOOST_FUNCTION_TEMPLATE_ARGS
+                            T...
                           >
                        >::type type;
       };
@@ -206,12 +205,12 @@ namespace boost {
                             void_function_obj_invoker<
                             FunctionObj,
                             R,
-                            BOOST_FUNCTION_TEMPLATE_ARGS
+                            T...
                           >,
                           function_obj_invoker<
                             FunctionObj,
                             R,
-                            BOOST_FUNCTION_TEMPLATE_ARGS
+                            T...
                           >
                        >::type type;
       };
@@ -227,12 +226,12 @@ namespace boost {
                             void_function_ref_invoker<
                             FunctionObj,
                             R,
-                            BOOST_FUNCTION_TEMPLATE_ARGS
+                            T...
                           >,
                           function_ref_invoker<
                             FunctionObj,
                             R,
-                            BOOST_FUNCTION_TEMPLATE_ARGS
+                            T...
                           >
                        >::type type;
       };
@@ -250,12 +249,12 @@ namespace boost {
                             void_member_invoker<
                             MemberPtr,
                             R,
-                            BOOST_FUNCTION_TEMPLATE_ARGS
+                            T...
                           >,
                           member_invoker<
                             MemberPtr,
                             R,
-                            BOOST_FUNCTION_TEMPLATE_ARGS
+                            T...
                           >
                        >::type type;
       };
@@ -284,7 +283,7 @@ namespace boost {
           typedef typename get_function_invoker<
                              FunctionPtr,
                              R,
-                             BOOST_FUNCTION_TEMPLATE_ARGS
+                             T...
                            >::type
             invoker_type;
 
@@ -298,7 +297,7 @@ namespace boost {
           typedef typename get_function_invoker<
                              FunctionPtr,
                              R,
-                             BOOST_FUNCTION_TEMPLATE_ARGS
+                             T...
                            >::type
             invoker_type;
 
@@ -318,7 +317,7 @@ namespace boost {
           typedef typename get_member_invoker<
                              MemberPtr,
                              R,
-                             BOOST_FUNCTION_TEMPLATE_ARGS
+                             T...
                            >::type
             invoker_type;
 
@@ -332,7 +331,7 @@ namespace boost {
           typedef typename get_member_invoker<
                              MemberPtr,
                              R,
-                             BOOST_FUNCTION_TEMPLATE_ARGS
+                             T...
                            >::type
             invoker_type;
 
@@ -352,7 +351,7 @@ namespace boost {
           typedef typename get_function_obj_invoker<
                              FunctionObj,
                              R,
-                             BOOST_FUNCTION_TEMPLATE_ARGS
+                             T...
                            >::type
             invoker_type;
 
@@ -366,7 +365,7 @@ namespace boost {
           typedef typename get_function_obj_invoker<
                              FunctionObj,
                              R,
-                             BOOST_FUNCTION_TEMPLATE_ARGS
+                             T...
                            >::type
             invoker_type;
 
@@ -385,7 +384,7 @@ namespace boost {
           typedef typename get_function_ref_invoker<
                              typename RefWrapper::type,
                              R,
-                             BOOST_FUNCTION_TEMPLATE_ARGS
+                             T...
                            >::type
             invoker_type;
 
@@ -399,7 +398,7 @@ namespace boost {
           typedef typename get_function_ref_invoker<
                              typename RefWrapper::type,
                              R,
-                             BOOST_FUNCTION_TEMPLATE_ARGS
+                             T...
                            >::type
             invoker_type;
 
@@ -422,7 +421,7 @@ namespace boost {
 
         typedef result_type (*invoker_type)(function_buffer&
                                            ,
-                                            BOOST_FUNCTION_TEMPLATE_ARGS);
+                                            T...);
 
         template<typename F>
         bool assign_to(F f, function_buffer& functor) const
@@ -624,7 +623,7 @@ namespace boost {
 
   private:
     typedef boost::detail::function::basic_vtable<
-              R, BOOST_FUNCTION_TEMPLATE_ARGS>
+              R, T...>
       vtable_type;
 
     vtable_type* get_vtable() const {
@@ -828,7 +827,7 @@ namespace boost {
       typedef boost::detail::function::get_invoker<tag> get_invoker;
       typedef typename get_invoker::
                          template apply<Functor, R,
-                        BOOST_FUNCTION_TEMPLATE_ARGS>
+                        T...>
         handler_type;
 
       typedef typename handler_type::invoker_type invoker_type;
@@ -862,7 +861,7 @@ namespace boost {
       typedef boost::detail::function::get_invoker<tag> get_invoker;
       typedef typename get_invoker::
                          template apply_a<Functor, Allocator, R,
-                         BOOST_FUNCTION_TEMPLATE_ARGS>
+                         T...>
         handler_type;
 
       typedef typename handler_type::invoker_type invoker_type;
@@ -941,11 +940,11 @@ namespace boost {
   template<typename R, typename... T>
   inline void swap(function_n<
                      R,
-                     BOOST_FUNCTION_TEMPLATE_ARGS
+                     T...
                    >& f1,
                    function_n<
                      R,
-                     BOOST_FUNCTION_TEMPLATE_ARGS
+                     T...
                    >& f2)
   {
     f1.swap(f2);
@@ -955,26 +954,26 @@ namespace boost {
 template<typename R, typename... T>
   void operator==(const function_n<
                           R,
-                          BOOST_FUNCTION_TEMPLATE_ARGS>&,
+                          T...>&,
                   const function_n<
                           R,
-                          BOOST_FUNCTION_TEMPLATE_ARGS>&);
+                          T...>&);
 template<typename R, typename... T>
   void operator!=(const function_n<
                           R,
-                          BOOST_FUNCTION_TEMPLATE_ARGS>&,
+                          T...>&,
                   const function_n<
                           R,
-                          BOOST_FUNCTION_TEMPLATE_ARGS>& );
+                          T...>& );
 
-#define BOOST_FUNCTION_PARTIAL_SPEC R (BOOST_FUNCTION_TEMPLATE_ARGS)
+#define BOOST_FUNCTION_PARTIAL_SPEC R (T...)
 
 template<typename R,
          typename... T>
 class function<BOOST_FUNCTION_PARTIAL_SPEC>
-  : public function_n<R, BOOST_FUNCTION_TEMPLATE_ARGS>
+  : public function_n<R, T...>
 {
-  typedef function_n<R, BOOST_FUNCTION_TEMPLATE_ARGS> base_type;
+  typedef function_n<R, T...> base_type;
   typedef function self_type;
 
   struct clear_type {};
@@ -1058,7 +1057,6 @@ public:
 } // end namespace boost
 
 // Cleanup after ourselves...
-#undef BOOST_FUNCTION_TEMPLATE_ARGS
 #undef BOOST_FUNCTION_PARMS
 #undef BOOST_FUNCTION_PARM
 #ifdef BOOST_FUNCTION_ARG
