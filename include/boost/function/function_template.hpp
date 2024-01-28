@@ -27,7 +27,6 @@
 #define BOOST_FUNCTION_COMMA ,
 
 // Class names used in this version of the code
-#define BOOST_FUNCTION_MEMBER_INVOKER               function_mem_invoker
 #define BOOST_FUNCTION_VOID_MEMBER_INVOKER          function_void_mem_invoker
 #define BOOST_FUNCTION_GET_FUNCTION_INVOKER         get_function_invoker
 #define BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER     get_function_obj_invoker
@@ -157,7 +156,7 @@ namespace boost {
         typename R BOOST_FUNCTION_COMMA
         BOOST_FUNCTION_TEMPLATE_PARMS
       >
-      struct BOOST_FUNCTION_MEMBER_INVOKER
+      struct member_invoker
       {
         static R invoke(function_buffer& function_obj_ptr BOOST_FUNCTION_COMMA
                         BOOST_FUNCTION_PARMS)
@@ -266,7 +265,7 @@ namespace boost {
                             R BOOST_FUNCTION_COMMA
                             BOOST_FUNCTION_TEMPLATE_ARGS
                           >,
-                          BOOST_FUNCTION_MEMBER_INVOKER<
+                          member_invoker<
                             MemberPtr,
                             R BOOST_FUNCTION_COMMA
                             BOOST_FUNCTION_TEMPLATE_ARGS
@@ -1074,7 +1073,6 @@ public:
 // Cleanup after ourselves...
 #undef BOOST_FUNCTION_VTABLE
 #undef BOOST_FUNCTION_COMMA
-#undef BOOST_FUNCTION_MEMBER_INVOKER
 #undef BOOST_FUNCTION_VOID_MEMBER_INVOKER
 #undef BOOST_FUNCTION_GET_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER
