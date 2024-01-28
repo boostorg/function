@@ -18,7 +18,6 @@
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif
 
-#define BOOST_FUNCTION_VOID_RETURN_TYPE void
 #define BOOST_FUNCTION_RETURN(X) X
 
 namespace boost {
@@ -46,7 +45,7 @@ namespace boost {
         >
       struct void_function_invoker
       {
-        static BOOST_FUNCTION_VOID_RETURN_TYPE
+        static void
         invoke(function_buffer& function_ptr,
                T... a)
 
@@ -83,7 +82,7 @@ namespace boost {
       >
       struct void_function_obj_invoker
       {
-        static BOOST_FUNCTION_VOID_RETURN_TYPE
+        static void
         invoke(function_buffer& function_obj_ptr,
                T... a)
 
@@ -121,7 +120,7 @@ namespace boost {
       >
       struct void_function_ref_invoker
       {
-        static BOOST_FUNCTION_VOID_RETURN_TYPE
+        static void
         invoke(function_buffer& function_obj_ptr,
                T... a)
 
@@ -158,7 +157,7 @@ namespace boost {
       >
       struct void_member_invoker
       {
-        static BOOST_FUNCTION_VOID_RETURN_TYPE
+        static void
         invoke(function_buffer& function_obj_ptr,
                T... a)
 
@@ -1060,7 +1059,6 @@ public:
 #endif
 #undef BOOST_FUNCTION_ARG_TYPE
 #undef BOOST_FUNCTION_ARG_TYPES
-#undef BOOST_FUNCTION_VOID_RETURN_TYPE
 #undef BOOST_FUNCTION_RETURN
 
 #if defined(BOOST_MSVC)
