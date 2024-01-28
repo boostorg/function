@@ -18,7 +18,6 @@
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif
 
-#define BOOST_FUNCTION_TEMPLATE_PARMS typename... T
 #define BOOST_FUNCTION_TEMPLATE_ARGS T...
 #define BOOST_FUNCTION_PARMS T... a
 #define BOOST_FUNCTION_ARGS static_cast<T&&>(a)...
@@ -32,7 +31,7 @@ namespace boost {
       template<
         typename FunctionPtr,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
         >
       struct function_invoker
       {
@@ -47,7 +46,7 @@ namespace boost {
       template<
         typename FunctionPtr,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
         >
       struct void_function_invoker
       {
@@ -64,7 +63,7 @@ namespace boost {
       template<
         typename FunctionObj,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
       >
       struct function_obj_invoker
       {
@@ -84,7 +83,7 @@ namespace boost {
       template<
         typename FunctionObj,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
       >
       struct void_function_obj_invoker
       {
@@ -105,7 +104,7 @@ namespace boost {
       template<
         typename FunctionObj,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
       >
       struct function_ref_invoker
       {
@@ -122,7 +121,7 @@ namespace boost {
       template<
         typename FunctionObj,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
       >
       struct void_function_ref_invoker
       {
@@ -142,7 +141,7 @@ namespace boost {
       template<
         typename MemberPtr,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
       >
       struct member_invoker
       {
@@ -159,7 +158,7 @@ namespace boost {
       template<
         typename MemberPtr,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
       >
       struct void_member_invoker
       {
@@ -178,7 +177,7 @@ namespace boost {
       template<
         typename FunctionPtr,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
       >
       struct get_function_invoker
       {
@@ -199,7 +198,7 @@ namespace boost {
       template<
         typename FunctionObj,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
        >
       struct get_function_obj_invoker
       {
@@ -220,7 +219,7 @@ namespace boost {
       template<
         typename FunctionObj,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
        >
       struct get_function_ref_invoker
       {
@@ -243,7 +242,7 @@ namespace boost {
       template<
         typename MemberPtr,
         typename R,
-        BOOST_FUNCTION_TEMPLATE_PARMS
+        typename... T
        >
       struct get_member_invoker
       {
@@ -279,7 +278,7 @@ namespace boost {
       struct get_invoker<function_ptr_tag>
       {
         template<typename FunctionPtr,
-                 typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+                 typename R, typename... T>
         struct apply
         {
           typedef typename get_function_invoker<
@@ -293,7 +292,7 @@ namespace boost {
         };
 
         template<typename FunctionPtr, typename Allocator,
-                 typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+                 typename R, typename... T>
         struct apply_a
         {
           typedef typename get_function_invoker<
@@ -313,7 +312,7 @@ namespace boost {
       struct get_invoker<member_ptr_tag>
       {
         template<typename MemberPtr,
-                 typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+                 typename R, typename... T>
         struct apply
         {
           typedef typename get_member_invoker<
@@ -327,7 +326,7 @@ namespace boost {
         };
 
         template<typename MemberPtr, typename Allocator,
-                 typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+                 typename R, typename... T>
         struct apply_a
         {
           typedef typename get_member_invoker<
@@ -347,7 +346,7 @@ namespace boost {
       struct get_invoker<function_obj_tag>
       {
         template<typename FunctionObj,
-                 typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+                 typename R, typename... T>
         struct apply
         {
           typedef typename get_function_obj_invoker<
@@ -361,7 +360,7 @@ namespace boost {
         };
 
         template<typename FunctionObj, typename Allocator,
-                 typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+                 typename R, typename... T>
         struct apply_a
         {
           typedef typename get_function_obj_invoker<
@@ -380,7 +379,7 @@ namespace boost {
       struct get_invoker<function_obj_ref_tag>
       {
         template<typename RefWrapper,
-                 typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+                 typename R, typename... T>
         struct apply
         {
           typedef typename get_function_ref_invoker<
@@ -394,7 +393,7 @@ namespace boost {
         };
 
         template<typename RefWrapper, typename Allocator,
-                 typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+                 typename R, typename... T>
         struct apply_a
         {
           typedef typename get_function_ref_invoker<
@@ -416,7 +415,7 @@ namespace boost {
        * members. It therefore cannot have any constructors,
        * destructors, base classes, etc.
        */
-      template<typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+      template<typename R, typename... T>
       struct basic_vtable
       {
         typedef R         result_type;
@@ -615,7 +614,7 @@ namespace boost {
 
   template<
     typename R,
-    BOOST_FUNCTION_TEMPLATE_PARMS
+    typename... T
   >
   class function_n : public function_base
                                 , public detail::function::variadic_function_base<T...>
@@ -939,7 +938,7 @@ namespace boost {
     }
   };
 
-  template<typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+  template<typename R, typename... T>
   inline void swap(function_n<
                      R,
                      BOOST_FUNCTION_TEMPLATE_ARGS
@@ -953,14 +952,14 @@ namespace boost {
   }
 
 // Poison comparisons between boost::function objects of the same type.
-template<typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+template<typename R, typename... T>
   void operator==(const function_n<
                           R,
                           BOOST_FUNCTION_TEMPLATE_ARGS>&,
                   const function_n<
                           R,
                           BOOST_FUNCTION_TEMPLATE_ARGS>&);
-template<typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
+template<typename R, typename... T>
   void operator!=(const function_n<
                           R,
                           BOOST_FUNCTION_TEMPLATE_ARGS>&,
@@ -971,7 +970,7 @@ template<typename R, BOOST_FUNCTION_TEMPLATE_PARMS>
 #define BOOST_FUNCTION_PARTIAL_SPEC R (BOOST_FUNCTION_TEMPLATE_ARGS)
 
 template<typename R,
-         BOOST_FUNCTION_TEMPLATE_PARMS>
+         typename... T>
 class function<BOOST_FUNCTION_PARTIAL_SPEC>
   : public function_n<R, BOOST_FUNCTION_TEMPLATE_ARGS>
 {
@@ -1059,7 +1058,6 @@ public:
 } // end namespace boost
 
 // Cleanup after ourselves...
-#undef BOOST_FUNCTION_TEMPLATE_PARMS
 #undef BOOST_FUNCTION_TEMPLATE_ARGS
 #undef BOOST_FUNCTION_PARMS
 #undef BOOST_FUNCTION_PARM
