@@ -27,7 +27,6 @@
 #define BOOST_FUNCTION_COMMA ,
 
 // Class names used in this version of the code
-#define BOOST_FUNCTION_GET_INVOKER                  get_invoker
 #define BOOST_FUNCTION_VTABLE                       basic_vtable
 
 #define BOOST_FUNCTION_VOID_RETURN_TYPE void
@@ -279,11 +278,11 @@ namespace boost {
          contains two typedefs, "invoker_type" and "manager_type",
          which correspond to the invoker and manager types. */
       template<typename Tag>
-      struct BOOST_FUNCTION_GET_INVOKER { };
+      struct get_invoker { };
 
       /* Retrieve the invoker for a function pointer. */
       template<>
-      struct BOOST_FUNCTION_GET_INVOKER<function_ptr_tag>
+      struct get_invoker<function_ptr_tag>
       {
         template<typename FunctionPtr,
                  typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
@@ -317,7 +316,7 @@ namespace boost {
 #if BOOST_FUNCTION_NUM_ARGS > 0
       /* Retrieve the invoker for a member pointer. */
       template<>
-      struct BOOST_FUNCTION_GET_INVOKER<member_ptr_tag>
+      struct get_invoker<member_ptr_tag>
       {
         template<typename MemberPtr,
                  typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
@@ -351,7 +350,7 @@ namespace boost {
 
       /* Retrieve the invoker for a function object. */
       template<>
-      struct BOOST_FUNCTION_GET_INVOKER<function_obj_tag>
+      struct get_invoker<function_obj_tag>
       {
         template<typename FunctionObj,
                  typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
@@ -384,7 +383,7 @@ namespace boost {
 
       /* Retrieve the invoker for a reference to a function object. */
       template<>
-      struct BOOST_FUNCTION_GET_INVOKER<function_obj_ref_tag>
+      struct get_invoker<function_obj_ref_tag>
       {
         template<typename RefWrapper,
                  typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
@@ -833,7 +832,7 @@ namespace boost {
       using boost::detail::function::vtable_base;
 
       typedef typename boost::detail::function::get_function_tag<Functor>::type tag;
-      typedef boost::detail::function::BOOST_FUNCTION_GET_INVOKER<tag> get_invoker;
+      typedef boost::detail::function::get_invoker<tag> get_invoker;
       typedef typename get_invoker::
                          template apply<Functor, R BOOST_FUNCTION_COMMA
                         BOOST_FUNCTION_TEMPLATE_ARGS>
@@ -867,7 +866,7 @@ namespace boost {
       using boost::detail::function::vtable_base;
 
       typedef typename boost::detail::function::get_function_tag<Functor>::type tag;
-      typedef boost::detail::function::BOOST_FUNCTION_GET_INVOKER<tag> get_invoker;
+      typedef boost::detail::function::get_invoker<tag> get_invoker;
       typedef typename get_invoker::
                          template apply_a<Functor, Allocator, R BOOST_FUNCTION_COMMA
                          BOOST_FUNCTION_TEMPLATE_ARGS>
@@ -1068,7 +1067,6 @@ public:
 // Cleanup after ourselves...
 #undef BOOST_FUNCTION_VTABLE
 #undef BOOST_FUNCTION_COMMA
-#undef BOOST_FUNCTION_GET_INVOKER
 #undef BOOST_FUNCTION_TEMPLATE_PARMS
 #undef BOOST_FUNCTION_TEMPLATE_ARGS
 #undef BOOST_FUNCTION_PARMS
