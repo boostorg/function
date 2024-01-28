@@ -26,9 +26,6 @@
 // Always have commas (zero args case is handled with variadics too)
 #define BOOST_FUNCTION_COMMA ,
 
-// Class names used in this version of the code
-#define BOOST_FUNCTION_VTABLE                       basic_vtable
-
 #define BOOST_FUNCTION_VOID_RETURN_TYPE void
 #define BOOST_FUNCTION_RETURN(X) X
 
@@ -423,7 +420,7 @@ namespace boost {
        * destructors, base classes, etc.
        */
       template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
-      struct BOOST_FUNCTION_VTABLE
+      struct basic_vtable
       {
         typedef R         result_type;
 
@@ -630,7 +627,7 @@ namespace boost {
     typedef R         result_type;
 
   private:
-    typedef boost::detail::function::BOOST_FUNCTION_VTABLE<
+    typedef boost::detail::function::basic_vtable<
               R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS>
       vtable_type;
 
@@ -1065,7 +1062,6 @@ public:
 } // end namespace boost
 
 // Cleanup after ourselves...
-#undef BOOST_FUNCTION_VTABLE
 #undef BOOST_FUNCTION_COMMA
 #undef BOOST_FUNCTION_TEMPLATE_PARMS
 #undef BOOST_FUNCTION_TEMPLATE_ARGS
