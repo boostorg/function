@@ -1050,14 +1050,6 @@ public:
 
 } // end namespace boost
 
-// Cleanup after ourselves...
-#undef BOOST_FUNCTION_PARM
-#ifdef BOOST_FUNCTION_ARG
-#   undef BOOST_FUNCTION_ARG
-#endif
-#undef BOOST_FUNCTION_ARG_TYPE
-#undef BOOST_FUNCTION_ARG_TYPES
-
 #if defined(BOOST_MSVC)
 #   pragma warning( pop )
 #endif
