@@ -960,11 +960,9 @@ template<typename R, typename... T>
                           R,
                           T...>& );
 
-#define BOOST_FUNCTION_PARTIAL_SPEC R (T...)
-
 template<typename R,
          typename... T>
-class function<BOOST_FUNCTION_PARTIAL_SPEC>
+class function<R (T...)>
   : public function_n<R, T...>
 {
   typedef function_n<R, T...> base_type;
@@ -1045,8 +1043,6 @@ public:
     return *this;
   }
 };
-
-#undef BOOST_FUNCTION_PARTIAL_SPEC
 
 } // end namespace boost
 
