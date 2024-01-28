@@ -1,3 +1,6 @@
+#ifndef BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP_INCLUDED
+#define BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP_INCLUDED
+
 // Boost.Function library
 
 //  Copyright Douglas Gregor 2001-2006
@@ -8,10 +11,15 @@
 
 // For more information, see http://www.boost.org
 
-// Note: this header is a header template and must NOT have multiple-inclusion
-// protection.
-#include <boost/function/detail/prologue.hpp>
+#include <boost/function/function_base.hpp>
 #include <boost/core/no_exceptions_support.hpp>
+#include <boost/mem_fn.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_void.hpp>
+#include <boost/config.hpp>
+#include <algorithm>
+#include <cassert>
 
 #if defined(BOOST_MSVC)
 #   pragma warning( push )
@@ -1041,3 +1049,30 @@ public:
 #if defined(BOOST_MSVC)
 #   pragma warning( pop )
 #endif
+
+// Resolve C++20 issue with fn == bind(...)
+// https://github.com/boostorg/function/issues/45
+
+namespace boost
+{
+
+namespace _bi
+{
+
+template<class R, class F, class L> class bind_t;
+
+} // namespace _bi
+
+template<class S, class R, class F, class L> bool operator==( function<S> const& f, _bi::bind_t<R, F, L> const& b )
+{
+    return f.contains( b );
+}
+
+template<class S, class R, class F, class L> bool operator!=( function<S> const& f, _bi::bind_t<R, F, L> const& b )
+{
+    return !f.contains( b );
+}
+
+} // namespace boost
+
+#endif // #ifndef BOOST_FUNCTION_FUNCTION_TEMPLATE_HPP_INCLUDED

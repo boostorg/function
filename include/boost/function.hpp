@@ -1,3 +1,6 @@
+#ifndef BOOST_FUNCTION_HPP_INCLUDED
+#define BOOST_FUNCTION_HPP_INCLUDED
+
 // Boost.Function library
 
 //  Copyright Douglas Gregor 2001-2003. Use, modification and
@@ -10,18 +13,6 @@
 // William Kempf, Jesse Jones and Karl Nelson were all very helpful in the
 // design of this library.
 
-#ifndef BOOST_FUNCTION_MAX_ARGS
-#  define BOOST_FUNCTION_MAX_ARGS 10
-#endif // BOOST_FUNCTION_MAX_ARGS
+#include <boost/function/function_template.hpp>
 
-#if !defined(BOOST_FUNCTION_MAX_ARGS_DEFINED) || (BOOST_FUNCTION_MAX_ARGS_DEFINED != BOOST_FUNCTION_MAX_ARGS)
-
-#if !defined(BOOST_FUNCTION_MAX_ARGS_DEFINED)
-#define BOOST_FUNCTION_MAX_ARGS_DEFINED 0
-#endif
-
-#include <boost/function/detail/prologue.hpp>
-#include <boost/function/detail/maybe_include.hpp>
-#include <boost/function/detail/epilogue.hpp>
-
-#endif // !defined(BOOST_FUNCTION_MAX_ARGS_DEFINED) || (BOOST_FUNCTION_MAX_ARGS_DEFINED != BOOST_FUNCTION_MAX_ARGS)
+#endif // #ifndef BOOST_FUNCTION_HPP_INCLUDED
