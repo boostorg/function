@@ -18,8 +18,6 @@
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif
 
-#define BOOST_FUNCTION_RETURN(X) X
-
 namespace boost {
   namespace detail {
     namespace function {
@@ -51,7 +49,7 @@ namespace boost {
 
         {
           FunctionPtr f = reinterpret_cast<FunctionPtr>(function_ptr.members.func_ptr);
-          BOOST_FUNCTION_RETURN(f(static_cast<T&&>(a)...));
+          f(static_cast<T&&>(a)...);
         }
       };
 
@@ -92,7 +90,7 @@ namespace boost {
             f = reinterpret_cast<FunctionObj*>(function_obj_ptr.data);
           else
             f = reinterpret_cast<FunctionObj*>(function_obj_ptr.members.obj_ptr);
-          BOOST_FUNCTION_RETURN((*f)(static_cast<T&&>(a)...));
+          (*f)(static_cast<T&&>(a)...);
         }
       };
 
@@ -127,7 +125,7 @@ namespace boost {
         {
           FunctionObj* f =
             reinterpret_cast<FunctionObj*>(function_obj_ptr.members.obj_ptr);
-          BOOST_FUNCTION_RETURN((*f)(static_cast<T&&>(a)...));
+          (*f)(static_cast<T&&>(a)...);
         }
       };
 
@@ -164,7 +162,7 @@ namespace boost {
         {
           MemberPtr* f =
             reinterpret_cast<MemberPtr*>(function_obj_ptr.data);
-          BOOST_FUNCTION_RETURN(boost::mem_fn(*f)(static_cast<T&&>(a)...));
+          boost::mem_fn(*f)(static_cast<T&&>(a)...);
         }
       };
 #endif
@@ -1059,7 +1057,6 @@ public:
 #endif
 #undef BOOST_FUNCTION_ARG_TYPE
 #undef BOOST_FUNCTION_ARG_TYPES
-#undef BOOST_FUNCTION_RETURN
 
 #if defined(BOOST_MSVC)
 #   pragma warning( pop )
