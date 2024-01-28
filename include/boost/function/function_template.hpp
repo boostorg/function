@@ -18,7 +18,6 @@
 #   pragma warning( disable : 4127 ) // "conditional expression is constant"
 #endif
 
-#define BOOST_FUNCTION_PARMS T... a
 #define BOOST_FUNCTION_ARGS static_cast<T&&>(a)...
 
 #define BOOST_FUNCTION_VOID_RETURN_TYPE void
@@ -35,7 +34,7 @@ namespace boost {
       struct function_invoker
       {
         static R invoke(function_buffer& function_ptr,
-                        BOOST_FUNCTION_PARMS)
+                        T... a)
         {
           FunctionPtr f = reinterpret_cast<FunctionPtr>(function_ptr.members.func_ptr);
           return f(BOOST_FUNCTION_ARGS);
@@ -51,7 +50,7 @@ namespace boost {
       {
         static BOOST_FUNCTION_VOID_RETURN_TYPE
         invoke(function_buffer& function_ptr,
-               BOOST_FUNCTION_PARMS)
+               T... a)
 
         {
           FunctionPtr f = reinterpret_cast<FunctionPtr>(function_ptr.members.func_ptr);
@@ -67,7 +66,7 @@ namespace boost {
       struct function_obj_invoker
       {
         static R invoke(function_buffer& function_obj_ptr,
-                        BOOST_FUNCTION_PARMS)
+                        T... a)
 
         {
           FunctionObj* f;
@@ -88,7 +87,7 @@ namespace boost {
       {
         static BOOST_FUNCTION_VOID_RETURN_TYPE
         invoke(function_buffer& function_obj_ptr,
-               BOOST_FUNCTION_PARMS)
+               T... a)
 
         {
           FunctionObj* f;
@@ -108,7 +107,7 @@ namespace boost {
       struct function_ref_invoker
       {
         static R invoke(function_buffer& function_obj_ptr,
-                        BOOST_FUNCTION_PARMS)
+                        T... a)
 
         {
           FunctionObj* f =
@@ -126,7 +125,7 @@ namespace boost {
       {
         static BOOST_FUNCTION_VOID_RETURN_TYPE
         invoke(function_buffer& function_obj_ptr,
-               BOOST_FUNCTION_PARMS)
+               T... a)
 
         {
           FunctionObj* f =
@@ -145,7 +144,7 @@ namespace boost {
       struct member_invoker
       {
         static R invoke(function_buffer& function_obj_ptr,
-                        BOOST_FUNCTION_PARMS)
+                        T... a)
 
         {
           MemberPtr* f =
@@ -163,7 +162,7 @@ namespace boost {
       {
         static BOOST_FUNCTION_VOID_RETURN_TYPE
         invoke(function_buffer& function_obj_ptr,
-               BOOST_FUNCTION_PARMS)
+               T... a)
 
         {
           MemberPtr* f =
@@ -684,7 +683,7 @@ namespace boost {
 
     ~function_n() { clear(); }
 
-    result_type operator()(BOOST_FUNCTION_PARMS) const
+    result_type operator()(T... a) const
     {
       if (this->empty())
         boost::throw_exception(bad_function_call());
@@ -1057,7 +1056,6 @@ public:
 } // end namespace boost
 
 // Cleanup after ourselves...
-#undef BOOST_FUNCTION_PARMS
 #undef BOOST_FUNCTION_PARM
 #ifdef BOOST_FUNCTION_ARG
 #   undef BOOST_FUNCTION_ARG
