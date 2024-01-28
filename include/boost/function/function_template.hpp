@@ -129,7 +129,6 @@ namespace boost {
         }
       };
 
-#if BOOST_FUNCTION_NUM_ARGS > 0
       /* Handle invocation of member pointers. */
       template<
         typename MemberPtr,
@@ -165,7 +164,6 @@ namespace boost {
           boost::mem_fn(*f)(static_cast<T&&>(a)...);
         }
       };
-#endif
 
       template<
         typename FunctionPtr,
@@ -230,7 +228,6 @@ namespace boost {
                        >::type type;
       };
 
-#if BOOST_FUNCTION_NUM_ARGS > 0
       /* Retrieve the appropriate invoker for a member pointer.  */
       template<
         typename MemberPtr,
@@ -252,7 +249,6 @@ namespace boost {
                           >
                        >::type type;
       };
-#endif
 
       /* Given the tag returned by get_function_tag, retrieve the
          actual invoker that will be used for the given function
@@ -299,7 +295,6 @@ namespace boost {
         };
       };
 
-#if BOOST_FUNCTION_NUM_ARGS > 0
       /* Retrieve the invoker for a member pointer. */
       template<>
       struct get_invoker<member_ptr_tag>
@@ -332,7 +327,6 @@ namespace boost {
           typedef functor_manager<MemberPtr> manager_type;
         };
       };
-#endif
 
       /* Retrieve the invoker for a function object. */
       template<>
@@ -468,7 +462,6 @@ namespace boost {
         }
 
         // Member pointers
-#if BOOST_FUNCTION_NUM_ARGS > 0
         template<typename MemberPtr>
         bool assign_to(MemberPtr f, function_buffer& functor, member_ptr_tag) const
         {
@@ -495,7 +488,6 @@ namespace boost {
             return false;
           }
         }
-#endif // BOOST_FUNCTION_NUM_ARGS > 0
 
         // Function objects
         // Assign to a function object using the small object optimization
