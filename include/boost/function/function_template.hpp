@@ -27,7 +27,6 @@
 #define BOOST_FUNCTION_COMMA ,
 
 // Class names used in this version of the code
-#define BOOST_FUNCTION_FUNCTION                     function_n
 #define BOOST_FUNCTION_FUNCTION_INVOKER             function_invoker
 #define BOOST_FUNCTION_VOID_FUNCTION_INVOKER        void_function_invoker
 #define BOOST_FUNCTION_FUNCTION_OBJ_INVOKER         function_obj_invoker
@@ -637,7 +636,7 @@ namespace boost {
     typename R BOOST_FUNCTION_COMMA
     BOOST_FUNCTION_TEMPLATE_PARMS
   >
-  class BOOST_FUNCTION_FUNCTION : public function_base
+  class function_n : public function_base
                                 , public detail::function::variadic_function_base<T...>
   {
   public:
@@ -665,14 +664,14 @@ namespace boost {
 
     BOOST_STATIC_CONSTANT(int, arity = sizeof...(T));
 
-    typedef BOOST_FUNCTION_FUNCTION self_type;
+    typedef function_n self_type;
 
-    BOOST_DEFAULTED_FUNCTION(BOOST_FUNCTION_FUNCTION(), : function_base() {})
+    BOOST_DEFAULTED_FUNCTION(function_n(), : function_base() {})
 
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor f
+    function_n(Functor f
                             ,typename boost::enable_if_<
                              !(is_integral<Functor>::value),
                                         int>::type = 0
@@ -682,7 +681,7 @@ namespace boost {
       this->assign_to(f);
     }
     template<typename Functor,typename Allocator>
-    BOOST_FUNCTION_FUNCTION(Functor f, Allocator a
+    function_n(Functor f, Allocator a
                             ,typename boost::enable_if_<
                               !(is_integral<Functor>::value),
                                         int>::type = 0
@@ -692,19 +691,19 @@ namespace boost {
       this->assign_to_a(f,a);
     }
 
-    BOOST_FUNCTION_FUNCTION(clear_type*) : function_base() { }
+    function_n(clear_type*) : function_base() { }
 
-    BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) : function_base()
+    function_n(const function_n& f) : function_base()
     {
       this->assign_to_own(f);
     }
 
-    BOOST_FUNCTION_FUNCTION(BOOST_FUNCTION_FUNCTION&& f) : function_base()
+    function_n(function_n&& f) : function_base()
     {
       this->move_assign(f);
     }
 
-    ~BOOST_FUNCTION_FUNCTION() { clear(); }
+    ~function_n() { clear(); }
 
     result_type operator()(BOOST_FUNCTION_PARMS) const
     {
@@ -715,15 +714,15 @@ namespace boost {
                (this->functor BOOST_FUNCTION_COMMA BOOST_FUNCTION_ARGS);
     }
 
-    // The distinction between when to use BOOST_FUNCTION_FUNCTION and
+    // The distinction between when to use function_n and
     // when to use self_type is obnoxious. MSVC cannot handle self_type as
     // the return type of these assignment operators, but Borland C++ cannot
-    // handle BOOST_FUNCTION_FUNCTION as the type of the temporary to
+    // handle function_n as the type of the temporary to
     // construct.
     template<typename Functor>
     typename boost::enable_if_<
                   !(is_integral<Functor>::value),
-               BOOST_FUNCTION_FUNCTION&>::type
+               function_n&>::type
     operator=(Functor f)
     {
       this->clear();
@@ -749,14 +748,14 @@ namespace boost {
       BOOST_CATCH_END
     }
 
-    BOOST_FUNCTION_FUNCTION& operator=(clear_type*)
+    function_n& operator=(clear_type*)
     {
       this->clear();
       return *this;
     }
 
-    // Assignment from another BOOST_FUNCTION_FUNCTION
-    BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
+    // Assignment from another function_n
+    function_n& operator=(const function_n& f)
     {
       if (&f == this)
         return *this;
@@ -772,8 +771,8 @@ namespace boost {
       return *this;
     }
 
-    // Move assignment from another BOOST_FUNCTION_FUNCTION
-    BOOST_FUNCTION_FUNCTION& operator=(BOOST_FUNCTION_FUNCTION&& f)
+    // Move assignment from another function_n
+    function_n& operator=(function_n&& f)
     {
       if (&f == this)
         return *this;
@@ -789,12 +788,12 @@ namespace boost {
       return *this;
     }
 
-    void swap(BOOST_FUNCTION_FUNCTION& other)
+    void swap(function_n& other)
     {
       if (&other == this)
         return;
 
-      BOOST_FUNCTION_FUNCTION tmp;
+      function_n tmp;
       tmp.move_assign(*this);
       this->move_assign(other);
       other.move_assign(tmp);
@@ -813,7 +812,7 @@ namespace boost {
     explicit operator bool () const { return !this->empty(); }
 
   private:
-    void assign_to_own(const BOOST_FUNCTION_FUNCTION& f)
+    void assign_to_own(const function_n& f)
     {
       if (!f.empty()) {
         this->vtable = f.vtable;
@@ -911,7 +910,7 @@ namespace boost {
     // Moves the value from the specified argument to *this. If the argument
     // has its function object allocated on the heap, move_assign will pass
     // its buffer to *this, and set the argument's buffer pointer to NULL.
-    void move_assign(BOOST_FUNCTION_FUNCTION& f)
+    void move_assign(function_n& f)
     {
       if (&f == this)
         return;
@@ -960,11 +959,11 @@ namespace boost {
   };
 
   template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
-  inline void swap(BOOST_FUNCTION_FUNCTION<
+  inline void swap(function_n<
                      R BOOST_FUNCTION_COMMA
                      BOOST_FUNCTION_TEMPLATE_ARGS
                    >& f1,
-                   BOOST_FUNCTION_FUNCTION<
+                   function_n<
                      R BOOST_FUNCTION_COMMA
                      BOOST_FUNCTION_TEMPLATE_ARGS
                    >& f2)
@@ -974,17 +973,17 @@ namespace boost {
 
 // Poison comparisons between boost::function objects of the same type.
 template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
-  void operator==(const BOOST_FUNCTION_FUNCTION<
+  void operator==(const function_n<
                           R BOOST_FUNCTION_COMMA
                           BOOST_FUNCTION_TEMPLATE_ARGS>&,
-                  const BOOST_FUNCTION_FUNCTION<
+                  const function_n<
                           R BOOST_FUNCTION_COMMA
                           BOOST_FUNCTION_TEMPLATE_ARGS>&);
 template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
-  void operator!=(const BOOST_FUNCTION_FUNCTION<
+  void operator!=(const function_n<
                           R BOOST_FUNCTION_COMMA
                           BOOST_FUNCTION_TEMPLATE_ARGS>&,
-                  const BOOST_FUNCTION_FUNCTION<
+                  const function_n<
                           R BOOST_FUNCTION_COMMA
                           BOOST_FUNCTION_TEMPLATE_ARGS>& );
 
@@ -993,9 +992,9 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
 template<typename R BOOST_FUNCTION_COMMA
          BOOST_FUNCTION_TEMPLATE_PARMS>
 class function<BOOST_FUNCTION_PARTIAL_SPEC>
-  : public BOOST_FUNCTION_FUNCTION<R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS>
+  : public function_n<R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS>
 {
-  typedef BOOST_FUNCTION_FUNCTION<R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS> base_type;
+  typedef function_n<R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_ARGS> base_type;
   typedef function self_type;
 
   struct clear_type {};
@@ -1081,7 +1080,6 @@ public:
 // Cleanup after ourselves...
 #undef BOOST_FUNCTION_VTABLE
 #undef BOOST_FUNCTION_COMMA
-#undef BOOST_FUNCTION_FUNCTION
 #undef BOOST_FUNCTION_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_VOID_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_FUNCTION_OBJ_INVOKER
