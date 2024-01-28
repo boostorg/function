@@ -27,7 +27,6 @@
 #define BOOST_FUNCTION_COMMA ,
 
 // Class names used in this version of the code
-#define BOOST_FUNCTION_GET_MEMBER_INVOKER           get_member_invoker
 #define BOOST_FUNCTION_GET_INVOKER                  get_invoker
 #define BOOST_FUNCTION_VTABLE                       basic_vtable
 
@@ -253,7 +252,7 @@ namespace boost {
         typename R BOOST_FUNCTION_COMMA
         BOOST_FUNCTION_TEMPLATE_PARMS
        >
-      struct BOOST_FUNCTION_GET_MEMBER_INVOKER
+      struct get_member_invoker
       {
         typedef typename conditional<(is_void<R>::value),
                             void_member_invoker<
@@ -324,7 +323,7 @@ namespace boost {
                  typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
         struct apply
         {
-          typedef typename BOOST_FUNCTION_GET_MEMBER_INVOKER<
+          typedef typename get_member_invoker<
                              MemberPtr,
                              R BOOST_FUNCTION_COMMA
                              BOOST_FUNCTION_TEMPLATE_ARGS
@@ -338,7 +337,7 @@ namespace boost {
                  typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS>
         struct apply_a
         {
-          typedef typename BOOST_FUNCTION_GET_MEMBER_INVOKER<
+          typedef typename get_member_invoker<
                              MemberPtr,
                              R BOOST_FUNCTION_COMMA
                              BOOST_FUNCTION_TEMPLATE_ARGS
@@ -1069,7 +1068,6 @@ public:
 // Cleanup after ourselves...
 #undef BOOST_FUNCTION_VTABLE
 #undef BOOST_FUNCTION_COMMA
-#undef BOOST_FUNCTION_GET_MEM_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_GET_INVOKER
 #undef BOOST_FUNCTION_TEMPLATE_PARMS
 #undef BOOST_FUNCTION_TEMPLATE_ARGS
