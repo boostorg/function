@@ -423,13 +423,13 @@ namespace boost {
         bool assign_to(F f, function_buffer& functor) const
         {
           typedef typename get_function_tag<F>::type tag;
-          return assign_to(f, functor, tag());
+          return assign_to(std::move(f), functor, tag());
         }
         template<typename F,typename Allocator>
         bool assign_to_a(F f, function_buffer& functor, Allocator a) const
         {
           typedef typename get_function_tag<F>::type tag;
-          return assign_to_a(f, functor, a, tag());
+          return assign_to_a(std::move(f), functor, a, tag());
         }
 
         void clear(function_buffer& functor) const
@@ -456,7 +456,7 @@ namespace boost {
           if (f) {
             // should be a reinterpret cast, but some compilers insist
             // on giving cv-qualifiers to free functions
-            functor.members.func_ptr = reinterpret_cast<void (*)()>(f);
+              functor.members.func_ptr = reinterpret_cast<void (*)()>(f);
             return true;
           } else {
             return false;
@@ -466,7 +466,7 @@ namespace boost {
         bool
         assign_to_a(FunctionPtr f, function_buffer& functor, Allocator, function_ptr_tag) const
         {
-          return assign_to(f,functor,function_ptr_tag());
+          return assign_to(std::move(f),functor,function_ptr_tag());
         }
 
         // Member pointers
@@ -503,13 +503,13 @@ namespace boost {
         void
         assign_functor(FunctionObj f, function_buffer& functor, true_type) const
         {
-          new (reinterpret_cast<void*>(functor.data)) FunctionObj(f);
+          new (reinterpret_cast<void*>(functor.data)) FunctionObj(std::move(f));
         }
         template<typename FunctionObj,typename Allocator>
         void
         assign_functor_a(FunctionObj f, function_buffer& functor, Allocator, true_type) const
         {
-          assign_functor(f,functor,true_type());
+          assign_functor(std::move(f),functor,true_type());
         }
 
         // Assign to a function object allocated on the heap.
@@ -517,7 +517,7 @@ namespace boost {
         void
         assign_functor(FunctionObj f, function_buffer& functor, false_type) const
         {
-          functor.members.obj_ptr = new FunctionObj(f);
+          functor.members.obj_ptr = new FunctionObj(std::move(f));
         }
         template<typename FunctionObj,typename Allocator>
         void
@@ -541,7 +541,7 @@ namespace boost {
         assign_to(FunctionObj f, function_buffer& functor, function_obj_tag) const
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
-            assign_functor(f, functor,
+            assign_functor(std::move(f), functor,
                            integral_constant<bool, (function_allows_small_object_optimization<FunctionObj>::value)>());
             return true;
           } else {
@@ -553,7 +553,7 @@ namespace boost {
         assign_to_a(FunctionObj f, function_buffer& functor, Allocator a, function_obj_tag) const
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
-            assign_functor_a(f, functor, a,
+            assign_functor_a(std::move(f), functor, a,
                            integral_constant<bool, (function_allows_small_object_optimization<FunctionObj>::value)>());
             return true;
           } else {
@@ -651,7 +651,7 @@ namespace boost {
                             ) :
       function_base()
     {
-      this->assign_to(f);
+      this->assign_to(std::move(f));
     }
     template<typename Functor,typename Allocator>
     function_n(Functor f, Allocator a
@@ -661,7 +661,7 @@ namespace boost {
                             ) :
       function_base()
     {
-      this->assign_to_a(f,a);
+      this->assign_to_a(std::move(f),a);
     }
 
     function_n(clear_type*) : function_base() { }
@@ -834,7 +834,7 @@ namespace boost {
       static const vtable_type stored_vtable =
         { { &manager_type::manage }, &invoker_type::invoke };
 
-      if (stored_vtable.assign_to(f, functor)) {
+      if (stored_vtable.assign_to(std::move(f), functor)) {
         std::size_t value = reinterpret_cast<std::size_t>(&stored_vtable.base);
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
         if (boost::has_trivial_copy_constructor<Functor>::value &&
@@ -868,7 +868,7 @@ namespace boost {
       static const vtable_type stored_vtable =
         { { &manager_type::manage }, &invoker_type::invoke };
 
-      if (stored_vtable.assign_to_a(f, functor, a)) {
+      if (stored_vtable.assign_to_a(std::move(f), functor, a)) {
         std::size_t value = reinterpret_cast<std::size_t>(&stored_vtable.base);
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
         if (boost::has_trivial_copy_constructor<Functor>::value &&
@@ -980,7 +980,7 @@ public:
                           !(is_integral<Functor>::value),
                        int>::type = 0
            ) :
-    base_type(f)
+    base_type(std::move(f))
   {
   }
   template<typename Functor,typename Allocator>
@@ -989,7 +989,7 @@ public:
                            !(is_integral<Functor>::value),
                        int>::type = 0
            ) :
-    base_type(f,a)
+    base_type(std::move(f),a)
   {
   }
 
