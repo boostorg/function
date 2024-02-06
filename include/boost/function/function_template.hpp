@@ -454,9 +454,7 @@ namespace boost {
         {
           this->clear(functor);
           if (f) {
-            // should be a reinterpret cast, but some compilers insist
-            // on giving cv-qualifiers to free functions
-              functor.members.func_ptr = reinterpret_cast<void (*)()>(f);
+            functor.members.func_ptr = reinterpret_cast<void (*)()>(f);
             return true;
           } else {
             return false;
