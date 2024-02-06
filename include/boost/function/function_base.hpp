@@ -262,16 +262,15 @@ namespace boost {
         manage_small(const function_buffer& in_buffer, function_buffer& out_buffer,
                 functor_manager_operation_type op)
         {
-          if (op == clone_functor_tag || op == move_functor_tag) {
+          if (op == clone_functor_tag) {
             const functor_type* in_functor =
               reinterpret_cast<const functor_type*>(in_buffer.data);
             new (reinterpret_cast<void*>(out_buffer.data)) functor_type(*in_functor);
 
-            if (op == move_functor_tag) {
+          } else if (op == move_functor_tag) {
               functor_type* f = reinterpret_cast<functor_type*>(in_buffer.data);
-              (void)f; // suppress warning about the value of f not being used (MSVC)
+              new (reinterpret_cast<void*>(out_buffer.data)) functor_type(std::move(*f));
               f->~Functor();
-            }
           } else if (op == destroy_functor_tag) {
             // Some compilers (Borland, vc6, ...) are unhappy with ~functor_type.
              functor_type* f = reinterpret_cast<functor_type*>(out_buffer.data);
