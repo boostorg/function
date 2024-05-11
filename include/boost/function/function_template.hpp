@@ -599,6 +599,18 @@ namespace boost {
         typedef T1 second_argument_type;
       };
 
+#if defined( BOOST_LIBSTDCXX_VERSION ) && BOOST_LIBSTDCXX_VERSION < 50000
+
+      template<class T> struct is_trivially_copy_constructible: std::integral_constant<bool, std::is_copy_constructible<T>::value && std::has_trivial_copy_constructor<T>::value>
+      {
+      };
+
+#else
+
+      using std::is_trivially_copy_constructible;
+
+#endif
+
     } // end namespace function
   } // end namespace detail
 
@@ -834,7 +846,7 @@ namespace boost {
       if (stored_vtable.assign_to(std::move(f), functor)) {
         std::size_t value = reinterpret_cast<std::size_t>(&stored_vtable.base);
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
-        if (std::is_trivially_copy_constructible<Functor>::value &&
+        if (boost::detail::function::is_trivially_copy_constructible<Functor>::value &&
             std::is_trivially_destructible<Functor>::value &&
             boost::detail::function::function_allows_small_object_optimization<Functor>::value)
           value |= static_cast<std::size_t>(0x01);
@@ -868,7 +880,7 @@ namespace boost {
       if (stored_vtable.assign_to_a(std::move(f), functor, a)) {
         std::size_t value = reinterpret_cast<std::size_t>(&stored_vtable.base);
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
-        if (std::is_trivially_copy_constructible<Functor>::value &&
+        if (boost::detail::function::is_trivially_copy_constructible<Functor>::value &&
             std::is_trivially_destructible<Functor>::value &&
             boost::detail::function::function_allows_small_object_optimization<Functor>::value)
           value |= static_cast<std::size_t>(0x01);
