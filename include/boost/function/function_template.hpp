@@ -15,11 +15,10 @@
 #include <boost/core/no_exceptions_support.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/throw_exception.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_void.hpp>
 #include <boost/config.hpp>
 #include <algorithm>
 #include <cassert>
+#include <type_traits>
 
 #if defined(BOOST_MSVC)
 #   pragma warning( push )
@@ -180,7 +179,7 @@ namespace boost {
       >
       struct get_function_invoker
       {
-        typedef typename conditional<(is_void<R>::value),
+        typedef typename std::conditional<std::is_void<R>::value,
                             void_function_invoker<
                             FunctionPtr,
                             R,
@@ -201,7 +200,7 @@ namespace boost {
        >
       struct get_function_obj_invoker
       {
-        typedef typename conditional<(is_void<R>::value),
+        typedef typename std::conditional<std::is_void<R>::value,
                             void_function_obj_invoker<
                             FunctionObj,
                             R,
@@ -222,7 +221,7 @@ namespace boost {
        >
       struct get_function_ref_invoker
       {
-        typedef typename conditional<(is_void<R>::value),
+        typedef typename std::conditional<std::is_void<R>::value,
                             void_function_ref_invoker<
                             FunctionObj,
                             R,
@@ -244,7 +243,7 @@ namespace boost {
        >
       struct get_member_invoker
       {
-        typedef typename conditional<(is_void<R>::value),
+        typedef typename std::conditional<std::is_void<R>::value,
                             void_member_invoker<
                             MemberPtr,
                             R,
@@ -499,27 +498,27 @@ namespace boost {
         // Assign to a function object using the small object optimization
         template<typename FunctionObj>
         void
-        assign_functor(FunctionObj f, function_buffer& functor, true_type) const
+        assign_functor(FunctionObj f, function_buffer& functor, std::true_type) const
         {
           new (reinterpret_cast<void*>(functor.data)) FunctionObj(std::move(f));
         }
         template<typename FunctionObj,typename Allocator>
         void
-        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator, true_type) const
+        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator, std::true_type) const
         {
-          assign_functor(std::move(f),functor,true_type());
+          assign_functor(std::move(f),functor,std::true_type());
         }
 
         // Assign to a function object allocated on the heap.
         template<typename FunctionObj>
         void
-        assign_functor(FunctionObj f, function_buffer& functor, false_type) const
+        assign_functor(FunctionObj f, function_buffer& functor, std::false_type) const
         {
           functor.members.obj_ptr = new FunctionObj(std::move(f));
         }
         template<typename FunctionObj,typename Allocator>
         void
-        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator a, false_type) const
+        assign_functor_a(FunctionObj f, function_buffer& functor, Allocator a, std::false_type) const
         {
           typedef functor_wrapper<FunctionObj,Allocator> functor_wrapper_type;
 
@@ -540,7 +539,7 @@ namespace boost {
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
             assign_functor(std::move(f), functor,
-                           integral_constant<bool, (function_allows_small_object_optimization<FunctionObj>::value)>());
+                           std::integral_constant<bool, (function_allows_small_object_optimization<FunctionObj>::value)>());
             return true;
           } else {
             return false;
@@ -552,7 +551,7 @@ namespace boost {
         {
           if (!boost::detail::function::has_empty_target(boost::addressof(f))) {
             assign_functor_a(std::move(f), functor, a,
-                           integral_constant<bool, (function_allows_small_object_optimization<FunctionObj>::value)>());
+                           std::integral_constant<bool, (function_allows_small_object_optimization<FunctionObj>::value)>());
             return true;
           } else {
             return false;
@@ -566,8 +565,8 @@ namespace boost {
                   function_buffer& functor, function_obj_ref_tag) const
         {
           functor.members.obj_ref.obj_ptr = (void *)(f.get_pointer());
-          functor.members.obj_ref.is_const_qualified = is_const<FunctionObj>::value;
-          functor.members.obj_ref.is_volatile_qualified = is_volatile<FunctionObj>::value;
+          functor.members.obj_ref.is_const_qualified = std::is_const<FunctionObj>::value;
+          functor.members.obj_ref.is_volatile_qualified = std::is_volatile<FunctionObj>::value;
           return true;
         }
         template<typename FunctionObj,typename Allocator>
@@ -643,8 +642,8 @@ namespace boost {
     // one with a default parameter.
     template<typename Functor>
     function_n(Functor f
-                            ,typename boost::enable_if_<
-                             !(is_integral<Functor>::value),
+                            ,typename std::enable_if<
+                             !std::is_integral<Functor>::value,
                                         int>::type = 0
                             ) :
       function_base()
@@ -653,8 +652,8 @@ namespace boost {
     }
     template<typename Functor,typename Allocator>
     function_n(Functor f, Allocator a
-                            ,typename boost::enable_if_<
-                              !(is_integral<Functor>::value),
+                            ,typename std::enable_if<
+                              !std::is_integral<Functor>::value,
                                         int>::type = 0
                             ) :
       function_base()
@@ -691,8 +690,8 @@ namespace boost {
     // handle function_n as the type of the temporary to
     // construct.
     template<typename Functor>
-    typename boost::enable_if_<
-                  !(is_integral<Functor>::value),
+    typename std::enable_if<
+                  !std::is_integral<Functor>::value,
                function_n&>::type
     operator=(Functor f)
     {
@@ -835,8 +834,8 @@ namespace boost {
       if (stored_vtable.assign_to(std::move(f), functor)) {
         std::size_t value = reinterpret_cast<std::size_t>(&stored_vtable.base);
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
-        if (boost::has_trivial_copy_constructor<Functor>::value &&
-            boost::has_trivial_destructor<Functor>::value &&
+        if (std::is_trivially_copy_constructible<Functor>::value &&
+            std::is_trivially_destructible<Functor>::value &&
             boost::detail::function::function_allows_small_object_optimization<Functor>::value)
           value |= static_cast<std::size_t>(0x01);
         vtable = reinterpret_cast<boost::detail::function::vtable_base *>(value);
@@ -869,8 +868,8 @@ namespace boost {
       if (stored_vtable.assign_to_a(std::move(f), functor, a)) {
         std::size_t value = reinterpret_cast<std::size_t>(&stored_vtable.base);
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
-        if (boost::has_trivial_copy_constructor<Functor>::value &&
-            boost::has_trivial_destructor<Functor>::value &&
+        if (std::is_trivially_copy_constructible<Functor>::value &&
+            std::is_trivially_destructible<Functor>::value &&
             boost::detail::function::function_allows_small_object_optimization<Functor>::value)
           value |= static_cast<std::size_t>(0x01);
         vtable = reinterpret_cast<boost::detail::function::vtable_base *>(value);
@@ -974,8 +973,8 @@ public:
 
   template<typename Functor>
   function(Functor f
-           ,typename boost::enable_if_<
-                          !(is_integral<Functor>::value),
+           ,typename std::enable_if<
+                          !std::is_integral<Functor>::value,
                        int>::type = 0
            ) :
     base_type(std::move(f))
@@ -983,8 +982,8 @@ public:
   }
   template<typename Functor,typename Allocator>
   function(Functor f, Allocator a
-           ,typename boost::enable_if_<
-                           !(is_integral<Functor>::value),
+           ,typename std::enable_if<
+                           !std::is_integral<Functor>::value,
                        int>::type = 0
            ) :
     base_type(std::move(f),a)
@@ -1014,8 +1013,8 @@ public:
   }
 
   template<typename Functor>
-  typename boost::enable_if_<
-                         !(is_integral<Functor>::value),
+  typename std::enable_if<
+                         !std::is_integral<Functor>::value,
                       self_type&>::type
   operator=(Functor f)
   {
