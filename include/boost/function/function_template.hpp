@@ -601,13 +601,12 @@ namespace boost {
 
 #if defined( BOOST_LIBSTDCXX_VERSION ) && BOOST_LIBSTDCXX_VERSION < 50000
 
-      template<class T> struct is_trivially_copy_constructible: std::integral_constant<bool, std::is_copy_constructible<T>::value && std::has_trivial_copy_constructor<T>::value>
-      {
-      };
+      template<class T> struct is_trivially_copyable: std::integral_constant<bool,
+        __has_trivial_copy(T) && __has_trivial_assign(T) && __has_trivial_destructor(T)> {};
 
 #else
 
-      using std::is_trivially_copy_constructible;
+      using std::is_trivially_copyable;
 
 #endif
 
@@ -846,8 +845,7 @@ namespace boost {
       if (stored_vtable.assign_to(std::move(f), functor)) {
         std::size_t value = reinterpret_cast<std::size_t>(&stored_vtable.base);
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
-        if (boost::detail::function::is_trivially_copy_constructible<Functor>::value &&
-            std::is_trivially_destructible<Functor>::value &&
+        if (boost::detail::function::is_trivially_copyable<Functor>::value &&
             boost::detail::function::function_allows_small_object_optimization<Functor>::value)
           value |= static_cast<std::size_t>(0x01);
         vtable = reinterpret_cast<boost::detail::function::vtable_base *>(value);
@@ -880,8 +878,7 @@ namespace boost {
       if (stored_vtable.assign_to_a(std::move(f), functor, a)) {
         std::size_t value = reinterpret_cast<std::size_t>(&stored_vtable.base);
         // coverity[pointless_expression]: suppress coverity warnings on apparant if(const).
-        if (boost::detail::function::is_trivially_copy_constructible<Functor>::value &&
-            std::is_trivially_destructible<Functor>::value &&
+        if (boost::detail::function::is_trivially_copyable<Functor>::value &&
             boost::detail::function::function_allows_small_object_optimization<Functor>::value)
           value |= static_cast<std::size_t>(0x01);
         vtable = reinterpret_cast<boost::detail::function::vtable_base *>(value);
