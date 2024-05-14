@@ -16,6 +16,7 @@ project
     <toolset>msvc:<warnings-as-errors>on
     <toolset>gcc:<warnings-as-errors>on
     <toolset>clang:<warnings-as-errors>on
+    <library>/boost/typeof//boost_typeof
   ;
 
 run function_test.cpp ;
