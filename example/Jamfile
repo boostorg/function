@@ -11,6 +11,8 @@ import-search /boost/config/checks ;
 import config : requires ;
 import testing ;
 
+project : requirements <library>/boost/function//boost_function ;
+
 run bind1st.cpp : : : [ requires cxx98_binders ] ;
 run int_div.cpp ;
 run sum_avg.cpp ;
