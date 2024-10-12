@@ -93,3 +93,5 @@ run contains2_test.cpp : : : <rtti>off <toolset>gcc-4.4,<cxxstd>0x:<build>no : c
 
 run contains3_test.cpp ;
 run contains3_test.cpp : : : <rtti>off <toolset>gcc-4.4,<cxxstd>0x:<build>no : contains3_test_no_rtti ;
+
+compile issue_53.cpp ;
