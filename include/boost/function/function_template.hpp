@@ -564,7 +564,7 @@ namespace boost {
         assign_to(const reference_wrapper<FunctionObj>& f,
                   function_buffer& functor, function_obj_ref_tag) const
         {
-          functor.members.obj_ref.obj_ptr = (void *)(f.get_pointer());
+          functor.members.obj_ref.obj_ptr = static_cast<void *>(f.get_pointer());
           functor.members.obj_ref.is_const_qualified = std::is_const<FunctionObj>::value;
           functor.members.obj_ref.is_volatile_qualified = std::is_volatile<FunctionObj>::value;
           return true;
